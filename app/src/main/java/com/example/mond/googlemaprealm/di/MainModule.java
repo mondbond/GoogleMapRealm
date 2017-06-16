@@ -1,9 +1,7 @@
 package com.example.mond.googlemaprealm.di;
 
 import com.example.mond.googlemaprealm.App;
-import com.example.mond.googlemaprealm.DbHelper;
-
-import javax.inject.Named;
+import com.example.mond.googlemaprealm.model.DbMarkerRepository;
 
 import dagger.Module;
 import dagger.Provides;
@@ -12,7 +10,7 @@ import dagger.Provides;
 public class MainModule {
 
     @Provides
-    DbHelper providesDbModel() {
-        return new DbHelper(App.getAppComponent().getContext());
+    DbMarkerRepository providesDbModel() {
+        return new DbMarkerRepository(App.getAppComponent().getContext());
     }
 }

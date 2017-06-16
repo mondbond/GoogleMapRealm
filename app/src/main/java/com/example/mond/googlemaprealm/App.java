@@ -6,6 +6,8 @@ import com.example.mond.googlemaprealm.di.AppComponent;
 import com.example.mond.googlemaprealm.di.AppModule;
 import com.example.mond.googlemaprealm.di.DaggerAppComponent;
 
+import io.realm.Realm;
+
 public class App extends Application {
 
     private static AppComponent appComponent;
@@ -14,6 +16,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         buildGraphAndInject();
+
+        Realm.init(this);
     }
 
     public static AppComponent getAppComponent() {

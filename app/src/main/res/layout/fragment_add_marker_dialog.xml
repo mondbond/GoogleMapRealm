@@ -1,0 +1,59 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.example.mond.googlemaprealm.view.AddMarkerDialogFragment">
+
+    <EditText
+        android:id="@+id/detail_marker_activity_title_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="42dp"
+        android:ems="10"
+        android:hint="Title"
+        android:inputType="text"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/detail_marker_activity_marker_ico_variant_4"
+        android:layout_toStartOf="@+id/detail_marker_activity_marker_ico_variant_4"/>
+
+    <ImageView
+        android:id="@+id/detail_marker_activity_marker_ico_variant_3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="53dp"
+        android:background="@drawable/marker_3"
+        android:contentDescription="a"
+        android:layout_below="@+id/detail_marker_activity_title_input"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/detail_marker_activity_marker_ico_variant_4"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/detail_marker_activity_marker_ico_variant_3"
+        android:layout_toEndOf="@+id/detail_marker_activity_marker_ico_variant_3"
+        android:layout_toRightOf="@+id/detail_marker_activity_marker_ico_variant_3"
+        android:background="@drawable/marker_4"
+        android:contentDescription="a"/>
+
+    <ImageView
+        android:id="@+id/detail_marker_activity_marker_ico_variant_2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/detail_marker_activity_marker_ico_variant_3"
+        android:layout_toLeftOf="@+id/detail_marker_activity_marker_ico_variant_3"
+        android:layout_toStartOf="@+id/detail_marker_activity_marker_ico_variant_3"
+        android:background="@drawable/marker_2"
+        android:contentDescription="a"/>
+
+    <ImageView
+        android:id="@+id/detail_marker_activity_marker_ico_variant_1"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/detail_marker_activity_marker_ico_variant_2"
+        android:layout_toLeftOf="@+id/detail_marker_activity_marker_ico_variant_2"
+        android:layout_toStartOf="@+id/detail_marker_activity_marker_ico_variant_2"
+        android:background="@drawable/marker_1"
+        android:contentDescription="a"/>
+</RelativeLayout>
