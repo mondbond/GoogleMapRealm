@@ -6,10 +6,15 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.mond.googlemaprealm.R;
+import com.example.mond.googlemaprealm.RandomLocationGenerator;
+import com.example.mond.googlemaprealm.model.Marker;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +38,13 @@ public class AddMarkerDialogFragment extends DialogFragment {
 
     @BindView(R.id.detail_marker_activity_marker_ico_variant_4)
     ImageView mIconVariant4;
+
+
+    @BindView(R.id.location_generator_btn)
+    Button mGeneratorbtn;
+
+    @BindView(R.id.location_generator_count_input)
+    EditText mCountInput;
 
     public static AddMarkerDialogFragment newInstance() {
         return new AddMarkerDialogFragment();
@@ -89,6 +101,13 @@ public class AddMarkerDialogFragment extends DialogFragment {
         }
     }
 
+    @OnClick(R.id.location_generator_btn)
+    public void generateMarkers() {
+        mListener.onAddingNewMarkers(Integer.parseInt((mCountInput.getText().toString())));
+        dismiss();
+    }
+
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -97,5 +116,6 @@ public class AddMarkerDialogFragment extends DialogFragment {
 
     public interface OnAddingNewMarker {
         void onAddingNewMarker(String title, int type);
+        void onAddingNewMarkers(int count);
     }
 }

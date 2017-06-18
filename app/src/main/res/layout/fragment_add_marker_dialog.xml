@@ -9,51 +9,68 @@
         android:id="@+id/detail_marker_activity_title_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
         android:ems="10"
-        android:hint="Title"
+        android:hint="@string/hint_title"
         android:inputType="text"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/detail_marker_activity_marker_ico_variant_4"
-        android:layout_toStartOf="@+id/detail_marker_activity_marker_ico_variant_4"/>
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="105dp"/>
 
     <ImageView
         android:id="@+id/detail_marker_activity_marker_ico_variant_3"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="53dp"
         android:background="@drawable/marker_3"
-        android:contentDescription="a"
         android:layout_below="@+id/detail_marker_activity_title_input"
-        android:layout_centerHorizontal="true"/>
+        android:layout_toRightOf="@+id/detail_marker_activity_marker_ico_variant_2"
+        android:layout_toEndOf="@+id/detail_marker_activity_marker_ico_variant_2"/>
 
     <ImageView
         android:id="@+id/detail_marker_activity_marker_ico_variant_4"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignTop="@+id/detail_marker_activity_marker_ico_variant_3"
-        android:layout_toEndOf="@+id/detail_marker_activity_marker_ico_variant_3"
-        android:layout_toRightOf="@+id/detail_marker_activity_marker_ico_variant_3"
         android:background="@drawable/marker_4"
-        android:contentDescription="a"/>
+        android:layout_below="@+id/detail_marker_activity_title_input"
+        android:layout_toRightOf="@+id/detail_marker_activity_marker_ico_variant_3"
+        android:layout_toEndOf="@+id/detail_marker_activity_marker_ico_variant_3"/>
 
     <ImageView
         android:id="@+id/detail_marker_activity_marker_ico_variant_2"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignTop="@+id/detail_marker_activity_marker_ico_variant_3"
-        android:layout_toLeftOf="@+id/detail_marker_activity_marker_ico_variant_3"
-        android:layout_toStartOf="@+id/detail_marker_activity_marker_ico_variant_3"
         android:background="@drawable/marker_2"
-        android:contentDescription="a"/>
+        android:layout_below="@+id/detail_marker_activity_title_input"
+        android:layout_toRightOf="@+id/detail_marker_activity_marker_ico_variant_1"
+        android:layout_toEndOf="@+id/detail_marker_activity_marker_ico_variant_1"/>
 
     <ImageView
         android:id="@+id/detail_marker_activity_marker_ico_variant_1"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignTop="@+id/detail_marker_activity_marker_ico_variant_2"
-        android:layout_toLeftOf="@+id/detail_marker_activity_marker_ico_variant_2"
-        android:layout_toStartOf="@+id/detail_marker_activity_marker_ico_variant_2"
         android:background="@drawable/marker_1"
-        android:contentDescription="a"/>
+        android:layout_below="@+id/detail_marker_activity_title_input"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <Button
+        android:id="@+id/location_generator_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/detail_marker_activity_marker_ico_variant_2"
+        android:layout_marginTop="46dp"
+        android:text="Button"/>
+
+    <EditText
+        android:id="@+id/location_generator_count_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/location_generator_btn"
+        android:layout_toEndOf="@+id/detail_marker_activity_marker_ico_variant_2"
+        android:layout_toRightOf="@+id/detail_marker_activity_marker_ico_variant_2"
+        android:ems="10"
+        android:inputType="number"/>
+
 </RelativeLayout>

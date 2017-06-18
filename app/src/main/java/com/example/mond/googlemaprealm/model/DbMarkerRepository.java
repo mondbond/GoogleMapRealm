@@ -84,6 +84,17 @@ public class DbMarkerRepository {
         mRealm.close();
     };
 
+    public void addMarkers(final List<Marker> markers) {
+        mRealm = Realm.getDefaultInstance();
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                mRealm.insert(markers);
+            }
+        });
+        mRealm.close();
+    }
+
     public interface DbMarkerRepositoryListener {
         void setAllMarkers(List<Marker> markers);
     }

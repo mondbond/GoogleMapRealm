@@ -37,4 +37,8 @@ public class MapPresenter implements BasePresenter<MapView>, DbMarkerRepository.
     public void setAllMarkers(List<Marker> markers) {
         mView.setAllMarkers(markers);
     }
+
+    public void addMarkers(List<Marker> markers) {
+        mDbMarkerRepository.addMarkers(markers);
+    }
 }
