@@ -3,6 +3,11 @@
     <string name="title_activity_maps">Map</string>
 
     <string name="hint_title">Title</string>
+    <string name="text_generate">Generate</string>
+    <string name="text_add_marker_introduce">Add your marker</string>
+    <string name="text_generate_introduce">or generate random in radius</string>
+    <string name="text_count">Count : </string>
+    <string name="text_radius">Radius in km: </string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

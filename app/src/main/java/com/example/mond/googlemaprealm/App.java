@@ -2,9 +2,9 @@ package com.example.mond.googlemaprealm;
 
 import android.app.Application;
 
-import com.example.mond.googlemaprealm.di.AppComponent;
-import com.example.mond.googlemaprealm.di.AppModule;
-import com.example.mond.googlemaprealm.di.DaggerAppComponent;
+import com.example.mond.googlemaprealm.di.containers.AppComponent;
+import com.example.mond.googlemaprealm.di.modules.AppModule;
+import com.example.mond.googlemaprealm.di.containers.DaggerAppComponent;
 
 import io.realm.Realm;
 

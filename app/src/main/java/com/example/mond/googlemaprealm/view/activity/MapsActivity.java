@@ -12,15 +12,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 
 import com.example.mond.googlemaprealm.App;
 import com.example.mond.googlemaprealm.R;
-import com.example.mond.googlemaprealm.RandomLocationGenerator;
 import com.example.mond.googlemaprealm.common.BaseActivity;
-import com.example.mond.googlemaprealm.di.AppComponent;
-import com.example.mond.googlemaprealm.di.DaggerMainComponent;
-import com.example.mond.googlemaprealm.di.MainComponent;
+import com.example.mond.googlemaprealm.di.containers.AppComponent;
+import com.example.mond.googlemaprealm.di.containers.DaggerMainComponent;
+import com.example.mond.googlemaprealm.di.containers.MainComponent;
 import com.example.mond.googlemaprealm.model.Marker;
 import com.example.mond.googlemaprealm.presenters.MapPresenter;
 import com.example.mond.googlemaprealm.util.Util;
@@ -30,7 +28,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -39,7 +36,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -77,9 +73,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         mapFragment.getMapAsync(this);
 
         buildGoogleApiClient();
-
-
-        init();
     }
 
     @Override
@@ -108,21 +101,12 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         }
     }
 
-    public void init() {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
-
-
-
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
@@ -159,11 +143,11 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
 
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-        mGoogleApiClient.connect();
+//        mGoogleApiClient.connect();
     }
 
     private void checkLocationPermission() {
@@ -209,9 +193,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
                         }
                         mMap.setMyLocationEnabled(true);
                     }
-
                 } else {
-
                     Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
                 }
                 return;
@@ -233,18 +215,18 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
                 @Override
                 public void onLocationChanged(Location location) {
 
-                    mLastLocation = location;
-                    if (mCurrLocationMarker != null) {
-                        mCurrLocationMarker.remove();
-                    }
+                mLastLocation = location;
+                if (mCurrLocationMarker != null) {
+                    mCurrLocationMarker.remove();
+                }
 
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng);
-                    markerOptions.title("Current Position");
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-                    mCurrLocationMarker = mMap.addMarker(markerOptions);
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,11));
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title("Current Position");
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                mCurrLocationMarker = mMap.addMarker(markerOptions);
+//                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
                 }
             });
         }
@@ -257,17 +239,15 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     }
 
     @Override
-    public void onAddingNewMarkers(int count) {
-        RandomLocationGenerator randomLocationGenerator = new RandomLocationGenerator();
-        List<Marker> markers = randomLocationGenerator.generateRandomLocations(mCurrentLatLng, 100000, count);
-        mMapPresenter.addMarkers(markers);
+    public void onAddingNewMarkers(int count, int radius) {
+        mMapPresenter.generateMarkers(count, radius, mCurrentLatLng);
     }
 
     @Override
     public void onMapLongClick(LatLng latLng) {
         mCurrentLatLng = latLng;
 
-        if(mAddMarkerDialogFragment == null){
+        if(mAddMarkerDialogFragment == null) {
             mAddMarkerDialogFragment = AddMarkerDialogFragment.newInstance();
         }
         mAddMarkerDialogFragment.show(getSupportFragmentManager(), "-");
@@ -277,7 +257,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     public void setAllMarkers(List<Marker> markers) {
         mMap.clear();
 
-        for(Marker item : markers){
+        for(Marker item : markers) {
             com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(item.getLatitude(),
                     item.getLongitude())).title(item.getTitle())
                     .icon(BitmapDescriptorFactory.fromBitmap(Util.getScaledIconByIndex(item.getIconType(), this))));
@@ -289,7 +269,5 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     public void onConnectionSuspended(int i) {}
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
 }

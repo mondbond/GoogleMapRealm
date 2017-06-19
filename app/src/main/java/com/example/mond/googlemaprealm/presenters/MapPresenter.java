@@ -1,5 +1,6 @@
 package com.example.mond.googlemaprealm.presenters;
 
+import com.example.mond.googlemaprealm.AsyncGeneratorTask;
 import com.example.mond.googlemaprealm.model.DbMarkerRepository;
 import com.example.mond.googlemaprealm.common.BasePresenter;
 import com.example.mond.googlemaprealm.model.Marker;
@@ -10,7 +11,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class MapPresenter implements BasePresenter<MapView>, DbMarkerRepository.DbMarkerRepositoryListener {
+public class MapPresenter implements BasePresenter<MapView>, DbMarkerRepository.DbMarkerRepositoryListener,
+        AsyncGeneratorTask.OnGeneratedMarkersSaved {
 
     private MapView mView;
     private DbMarkerRepository mDbMarkerRepository;
@@ -27,6 +29,12 @@ public class MapPresenter implements BasePresenter<MapView>, DbMarkerRepository.
 
     public void addNewMarker(String title, int iconType, LatLng latLng){
         mDbMarkerRepository.addNewMarker(title, iconType, latLng);
+        mDbMarkerRepository.getAllMarkers(this);
+    }
+
+    public void generateMarkers(int count, int radius, LatLng currentLatLng) {
+        AsyncGeneratorTask task = new AsyncGeneratorTask(mDbMarkerRepository, currentLatLng, radius, count, this);
+        task.execute();
     }
 
     public void setUpAllMarkers(){
@@ -38,7 +46,8 @@ public class MapPresenter implements BasePresenter<MapView>, DbMarkerRepository.
         mView.setAllMarkers(markers);
     }
 
-    public void addMarkers(List<Marker> markers) {
-        mDbMarkerRepository.addMarkers(markers);
+    @Override
+    public void onMarkersSaved() {
+        mDbMarkerRepository.getAllMarkers(this);
     }
 }

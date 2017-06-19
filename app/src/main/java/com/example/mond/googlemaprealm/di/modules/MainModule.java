@@ -1,4 +1,4 @@
-package com.example.mond.googlemaprealm.di;
+package com.example.mond.googlemaprealm.di.modules;
 
 import com.example.mond.googlemaprealm.App;
 import com.example.mond.googlemaprealm.model.DbMarkerRepository;

@@ -1,9 +1,8 @@
 package com.example.mond.googlemaprealm;
 
-import android.util.Log;
-
 import com.example.mond.googlemaprealm.model.Marker;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +13,10 @@ public class RandomLocationGenerator {
 
     private Random mRandom;
     private ArrayList<Marker> mMarkers;
+    private double mKmPerDegree;
 
     public List<Marker> generateRandomLocations(LatLng latLng, int radius, int count) {
-
+        mKmPerDegree = getKmPerDegree(latLng);
         mMarkers = new ArrayList<>();
         for(int i = 0; i != count; i++ ){
             com.example.mond.googlemaprealm.model.Marker marker = new com.example.mond.googlemaprealm.model.Marker();
@@ -32,24 +32,25 @@ public class RandomLocationGenerator {
         return mMarkers;
     }
 
-    private LatLng generateRandomLocation(LatLng latLng, int radius){
+    private LatLng generateRandomLocation(LatLng tapPosition, int radius){
 
-        double radiusInDegrees = ((double)radius) / 111300;
+        double radiusInDegrees = radius/mKmPerDegree;
+
         if(mRandom == null){
             mRandom = new Random();
         }
 
-        double randomX = radiusInDegrees * mRandom.nextDouble();
-        double randomY = radiusInDegrees * mRandom.nextDouble();
+        double randomDegree = 360 * mRandom.nextDouble();
+        double randomRadius = radiusInDegrees * mRandom.nextDouble();
 
-        if(!mRandom.nextBoolean()){
-            randomX = randomX * -1;
-        }
+        double lat = randomRadius * Math.cos(randomDegree);
+        double lng = randomRadius * Math.sin(randomDegree);
 
-        if(!mRandom.nextBoolean()){
-            randomY = randomY * -1;
-        }
+        return new LatLng(tapPosition.latitude + lat,tapPosition.longitude + lng);
+    }
 
-        return new LatLng(latLng.latitude + randomX, latLng.longitude + randomY);
+    private double getKmPerDegree(LatLng currentPosition) {
+        LatLng testPosition = new LatLng(currentPosition.latitude + 1, currentPosition.longitude + 1);
+        return SphericalUtil.computeDistanceBetween(currentPosition, testPosition)/1000;
     }
 }

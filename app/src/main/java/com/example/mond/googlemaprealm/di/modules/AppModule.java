@@ -1,4 +1,4 @@
-package com.example.mond.googlemaprealm.di;
+package com.example.mond.googlemaprealm.di.modules;
 
 import android.content.Context;
 

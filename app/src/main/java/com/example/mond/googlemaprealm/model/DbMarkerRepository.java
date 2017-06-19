@@ -43,6 +43,7 @@ public class DbMarkerRepository {
 
     public void getAllMarkers(final DbMarkerRepositoryListener listener) {
 
+        mRealm = Realm.getDefaultInstance();
         RealmResults<Marker> markers = mRealm.where(Marker.class).findAllAsync();
 
         markers.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<Marker>>() {
@@ -51,6 +52,7 @@ public class DbMarkerRepository {
                 listener.setAllMarkers(mRealm.copyFromRealm(markers));
             }
         });
+        mRealm.close();
     }
 
     public Marker getMarkerById(final String id) {

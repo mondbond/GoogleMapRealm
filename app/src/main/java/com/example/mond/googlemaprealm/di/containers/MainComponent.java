@@ -1,6 +1,7 @@
-package com.example.mond.googlemaprealm.di;
+package com.example.mond.googlemaprealm.di.containers;
 
-import com.example.mond.googlemaprealm.view.AddMarkerDialogFragment;
+import com.example.mond.googlemaprealm.di.containers.AppComponent;
+import com.example.mond.googlemaprealm.di.modules.MainModule;
 import com.example.mond.googlemaprealm.view.activity.DetailMarkerActivity;
 import com.example.mond.googlemaprealm.view.activity.MapsActivity;
 

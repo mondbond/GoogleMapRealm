@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.example.mond.googlemaprealm.R;
 import com.example.mond.googlemaprealm.RandomLocationGenerator;
 import com.example.mond.googlemaprealm.model.Marker;
+import com.example.mond.googlemaprealm.util.Util;
 
 import java.util.List;
 
@@ -46,6 +47,9 @@ public class AddMarkerDialogFragment extends DialogFragment {
     @BindView(R.id.location_generator_count_input)
     EditText mCountInput;
 
+    @BindView(R.id.location_generator_radius_input)
+    EditText mRadiusInput;
+
     public static AddMarkerDialogFragment newInstance() {
         return new AddMarkerDialogFragment();
     }
@@ -67,26 +71,7 @@ public class AddMarkerDialogFragment extends DialogFragment {
     @OnClick({R.id.detail_marker_activity_marker_ico_variant_1, R.id.detail_marker_activity_marker_ico_variant_2,
             R.id.detail_marker_activity_marker_ico_variant_3, R.id.detail_marker_activity_marker_ico_variant_4})
     public void onIconSelected(View view){
-
-        int iconIndex;
-        switch (view.getId()){
-            case R.id.detail_marker_activity_marker_ico_variant_1:
-                iconIndex = 1;
-                break;
-            case R.id.detail_marker_activity_marker_ico_variant_2:
-                iconIndex = 2;
-                break;
-            case R.id.detail_marker_activity_marker_ico_variant_3:
-                iconIndex = 3;
-                break;
-            case R.id.detail_marker_activity_marker_ico_variant_4:
-                iconIndex = 4;
-                break;
-            default:
-                iconIndex = 1;
-        }
-
-        mListener.onAddingNewMarker(mTitle.getText().toString(), iconIndex);
+        mListener.onAddingNewMarker(mTitle.getText().toString(), Util.getTypeIndexById(view));
         dismiss();
     }
 
@@ -103,7 +88,8 @@ public class AddMarkerDialogFragment extends DialogFragment {
 
     @OnClick(R.id.location_generator_btn)
     public void generateMarkers() {
-        mListener.onAddingNewMarkers(Integer.parseInt((mCountInput.getText().toString())));
+        mListener.onAddingNewMarkers(Integer.parseInt((mCountInput.getText().toString())),
+                Integer.parseInt(mRadiusInput.getText().toString()));
         dismiss();
     }
 
@@ -116,6 +102,6 @@ public class AddMarkerDialogFragment extends DialogFragment {
 
     public interface OnAddingNewMarker {
         void onAddingNewMarker(String title, int type);
-        void onAddingNewMarkers(int count);
+        void onAddingNewMarkers(int count, int radius);
     }
 }
