@@ -101,6 +101,14 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         }
     }
 
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -112,11 +120,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
-                //Location Permission already granted
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
             } else {
-                //Request Location Permission
                 checkLocationPermission();
             }
         }
@@ -141,15 +147,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         });
     }
 
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-//        mGoogleApiClient.connect();
-    }
-
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -158,9 +155,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 new AlertDialog.Builder(this)
-                        .setTitle("Location Permission Needed")
-                        .setMessage("This app needs the Location permission, please accept to use location functionality")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setTitle(getString(R.string.title_need_location_permission))
+                        .setMessage(getString(R.string.text_need_location_permission))
+                        .setPositiveButton(getString(R.string.text_ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 ActivityCompat.requestPermissions(MapsActivity.this,
@@ -178,8 +175,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
                 if (grantResults.length > 0
@@ -194,7 +190,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
                         mMap.setMyLocationEnabled(true);
                     }
                 } else {
-                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.text_permission_denied), Toast.LENGTH_LONG).show();
                 }
                 return;
             }
@@ -223,10 +219,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
-                markerOptions.title("Current Position");
+                markerOptions.title(getString(R.string.title_current_position));
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
                 mCurrLocationMarker = mMap.addMarker(markerOptions);
-//                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
                 }
             });
         }
@@ -239,8 +234,19 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     }
 
     @Override
-    public void onAddingNewMarkers(int count, int radius) {
+    public void onAddingGeneratedMarkers(int count, int radius) {
         mMapPresenter.generateMarkers(count, radius, mCurrentLatLng);
+    }
+
+    @Override
+    public void setAllMarkers(List<Marker> markers) {
+        mMap.clear();
+        for(Marker item : markers) {
+            com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(item.getLatitude(),
+                    item.getLongitude())).title(item.getTitle())
+                    .icon(BitmapDescriptorFactory.fromBitmap(Util.getScaledIconByIndex(item.getIconType(), this))));
+            marker.setTag(item.getId());
+        }
     }
 
     @Override
@@ -250,19 +256,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         if(mAddMarkerDialogFragment == null) {
             mAddMarkerDialogFragment = AddMarkerDialogFragment.newInstance();
         }
-        mAddMarkerDialogFragment.show(getSupportFragmentManager(), "-");
-    }
-
-    @Override
-    public void setAllMarkers(List<Marker> markers) {
-        mMap.clear();
-
-        for(Marker item : markers) {
-            com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(item.getLatitude(),
-                    item.getLongitude())).title(item.getTitle())
-                    .icon(BitmapDescriptorFactory.fromBitmap(Util.getScaledIconByIndex(item.getIconType(), this))));
-            marker.setTag(item.getId());
-        }
+        mAddMarkerDialogFragment.show(getSupportFragmentManager(),
+                AddMarkerDialogFragment.ADD_MARKER_DIALOG_FRAGMENT_TAG);
     }
 
     @Override

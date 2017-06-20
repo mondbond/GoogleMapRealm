@@ -11,7 +11,6 @@ public class Util {
 
     public static Bitmap getScaledIconByIndex(int index, Context context) {
         Bitmap bitmap;
-
         switch (index){
             case 1:
                 bitmap = BitmapFactory.decodeResource(context.getResources(), context.getResources()

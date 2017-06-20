@@ -6,10 +6,15 @@
     <string name="text_generate">Generate</string>
     <string name="text_add_marker_introduce">Add your marker</string>
     <string name="text_generate_introduce">or generate random in radius</string>
-    <string name="text_count">Count : </string>
-    <string name="text_radius">Radius in km: </string>
+    <string name="hint_count">Count</string>
+    <string name="hint_radius">Radius in km</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_current_position">Current position</string>
+    <string name="title_need_location_permission">Location Permission Needed</string>
+    <string name="text_need_location_permission">This app needs the Location permission,
+        please accept to use location functionality</string>
+    <string name="text_ok">OK</string>
+    <string name="text_permission_denied">permission denied</string>
+
     <string name="title_activity_detail_marker">DetailMarkerActivity</string>
 </resources>

@@ -57,21 +57,22 @@
         android:id="@+id/location_generator_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="30dp"
         android:text="@string/text_generate"
-        android:layout_below="@+id/radius_text"
-        android:layout_alignLeft="@+id/location_generator_count_input"
-        android:layout_alignStart="@+id/location_generator_count_input"/>
+        android:layout_below="@+id/location_generator_count_input"
+        android:layout_centerHorizontal="true"/>
 
     <EditText
         android:id="@+id/location_generator_count_input"
-        android:layout_width="wrap_content"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="@string/hint_count"
         android:inputType="number"
-        android:layout_alignTop="@+id/count_text"
-        android:layout_toRightOf="@+id/detail_marker_activity_marker_ico_variant_2"
-        android:layout_toEndOf="@+id/detail_marker_activity_marker_ico_variant_2"/>
+        android:layout_alignBaseline="@+id/location_generator_radius_input"
+        android:layout_alignBottom="@+id/location_generator_radius_input"
+        android:layout_toRightOf="@+id/detail_marker_activity_marker_ico_variant_3"
+        android:layout_toEndOf="@+id/detail_marker_activity_marker_ico_variant_3"/>
 
     <TextView
         android:id="@+id/add_marker_introduce_text"
@@ -84,7 +85,7 @@
         android:textSize="20sp"/>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/add_marker_generation_introduce"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -94,37 +95,16 @@
         android:text="@string/text_generate_introduce"
         android:textSize="20sp"/>
 
-    <TextView
-        android:id="@+id/count_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="20dp"
-        android:text="@string/text_count"
-        android:textSize="20sp"/>
-
-    <TextView
-        android:id="@+id/radius_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/count_text"
-        android:layout_marginTop="21dp"
-        android:text="@string/text_radius"
-        android:textSize="20sp"/>
-
     <EditText
         android:id="@+id/location_generator_radius_input"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/location_generator_btn"
-        android:layout_alignStart="@+id/location_generator_btn"
-        android:layout_alignTop="@+id/radius_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/add_marker_generation_introduce"
+        android:layout_marginTop="19dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"/>
+        android:hint="@string/hint_radius"
+        android:inputType="number"/>
 
 </RelativeLayout>

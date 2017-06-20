@@ -1,6 +1,6 @@
 package com.example.mond.googlemaprealm.presenters;
 
-import com.example.mond.googlemaprealm.AsyncGeneratorTask;
+import com.example.mond.googlemaprealm.data.AsyncGeneratorTask;
 import com.example.mond.googlemaprealm.model.DbMarkerRepository;
 import com.example.mond.googlemaprealm.common.BasePresenter;
 import com.example.mond.googlemaprealm.model.Marker;

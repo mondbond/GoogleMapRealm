@@ -1,7 +1,5 @@
 package com.example.mond.googlemaprealm.model;
 
-import android.content.Context;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -14,11 +12,9 @@ import io.realm.RealmResults;
 
 public class DbMarkerRepository {
 
-    private Context mContext;
     private Realm mRealm;
 
-    public DbMarkerRepository(Context context) {
-        mContext = context;
+    public DbMarkerRepository() {
         mRealm = Realm.getDefaultInstance();
     }
 
@@ -42,10 +38,8 @@ public class DbMarkerRepository {
     }
 
     public void getAllMarkers(final DbMarkerRepositoryListener listener) {
-
         mRealm = Realm.getDefaultInstance();
         RealmResults<Marker> markers = mRealm.where(Marker.class).findAllAsync();
-
         markers.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<Marker>>() {
             @Override
             public void onChange(RealmResults<Marker> markers, OrderedCollectionChangeSet changeSet) {
@@ -56,9 +50,7 @@ public class DbMarkerRepository {
     }
 
     public Marker getMarkerById(final String id) {
-        Marker marker = mRealm.where(Marker.class).equalTo("id", id).findFirst();
-
-        return marker;
+        return mRealm.where(Marker.class).equalTo("id", id).findFirst();
     }
 
     public void updateMarker(final String id, final  String title, final int index) {

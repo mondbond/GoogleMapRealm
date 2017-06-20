@@ -6,22 +6,20 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.mond.googlemaprealm.R;
-import com.example.mond.googlemaprealm.RandomLocationGenerator;
-import com.example.mond.googlemaprealm.model.Marker;
 import com.example.mond.googlemaprealm.util.Util;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AddMarkerDialogFragment extends DialogFragment {
+    public static final String ADD_MARKER_DIALOG_FRAGMENT_TAG = "addMarkerDialogFragmentTag";
 
     private OnAddingNewMarker mListener;
 
@@ -64,6 +62,7 @@ public class AddMarkerDialogFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_marker_dialog, container, false);
         ButterKnife.bind(this, v);
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         return v;
     }
@@ -88,11 +87,10 @@ public class AddMarkerDialogFragment extends DialogFragment {
 
     @OnClick(R.id.location_generator_btn)
     public void generateMarkers() {
-        mListener.onAddingNewMarkers(Integer.parseInt((mCountInput.getText().toString())),
+        mListener.onAddingGeneratedMarkers(Integer.parseInt((mCountInput.getText().toString())),
                 Integer.parseInt(mRadiusInput.getText().toString()));
         dismiss();
     }
-
 
     @Override
     public void onDetach() {
@@ -102,6 +100,6 @@ public class AddMarkerDialogFragment extends DialogFragment {
 
     public interface OnAddingNewMarker {
         void onAddingNewMarker(String title, int type);
-        void onAddingNewMarkers(int count, int radius);
+        void onAddingGeneratedMarkers(int count, int radius);
     }
 }

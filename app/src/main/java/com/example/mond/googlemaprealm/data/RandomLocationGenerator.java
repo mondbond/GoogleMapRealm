@@ -1,4 +1,4 @@
-package com.example.mond.googlemaprealm;
+package com.example.mond.googlemaprealm.data;
 
 import com.example.mond.googlemaprealm.model.Marker;
 import com.google.android.gms.maps.model.LatLng;
@@ -12,28 +12,26 @@ import java.util.UUID;
 public class RandomLocationGenerator {
 
     private Random mRandom;
-    private ArrayList<Marker> mMarkers;
     private double mKmPerDegree;
 
     public List<Marker> generateRandomLocations(LatLng latLng, int radius, int count) {
         mKmPerDegree = getKmPerDegree(latLng);
-        mMarkers = new ArrayList<>();
-        for(int i = 0; i != count; i++ ){
+        ArrayList<Marker> markers = new ArrayList<>();
+        for(int i = 0; i != count; i++ ) {
             com.example.mond.googlemaprealm.model.Marker marker = new com.example.mond.googlemaprealm.model.Marker();
-            marker.setIconType(1);
-            marker.setTitle(String.valueOf(count));
+            marker.setTitle(String.valueOf(i));
             marker.setId(UUID.randomUUID().toString());
             LatLng randomLatLng = generateRandomLocation(latLng, radius);
             marker.setLatitude(randomLatLng.latitude);
             marker.setLongitude(randomLatLng.longitude);
-            mMarkers.add(marker);
+            marker.setIconType(mRandom.nextInt(4));
+            markers.add(marker);
         }
 
-        return mMarkers;
+        return markers;
     }
 
-    private LatLng generateRandomLocation(LatLng tapPosition, int radius){
-
+    private LatLng generateRandomLocation(LatLng tapPosition, int radius) {
         double radiusInDegrees = radius/mKmPerDegree;
 
         if(mRandom == null){

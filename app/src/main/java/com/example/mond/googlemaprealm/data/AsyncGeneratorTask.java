@@ -1,4 +1,4 @@
-package com.example.mond.googlemaprealm;
+package com.example.mond.googlemaprealm.data;
 
 import android.os.AsyncTask;
 
@@ -27,10 +27,8 @@ public class AsyncGeneratorTask extends AsyncTask {
 
     @Override
     protected Object doInBackground(Object[] params) {
-
         RandomLocationGenerator randomLocationGenerator = new RandomLocationGenerator();
         List<Marker> markers = randomLocationGenerator.generateRandomLocations(mSelectedLatLng, mRadius, mCount);
-
         mDbMarkerRepository.addMarkers(markers);
 
         return null;
