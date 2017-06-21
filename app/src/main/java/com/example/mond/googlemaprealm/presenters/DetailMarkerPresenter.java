@@ -4,7 +4,8 @@ import com.example.mond.googlemaprealm.model.DbMarkerRepository;
 import com.example.mond.googlemaprealm.common.BasePresenter;
 import com.example.mond.googlemaprealm.view.DetailView;
 import javax.inject.Inject;
-
+// TODO: 21.06.17 use interface with methods for this presenter for better abstraction
+// TODO: 21.06.17 detach view from presenter when it's destroyed
 public class DetailMarkerPresenter implements BasePresenter<DetailView>{
     private DetailView mView;
     private DbMarkerRepository mDbMarkerRepository;

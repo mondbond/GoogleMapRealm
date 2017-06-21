@@ -34,6 +34,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.List;
@@ -46,10 +48,12 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         AddMarkerDialogFragment.OnAddingNewMarker, GoogleMap.OnMapLongClickListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
+    private static final String TAG = "MapsActivity";
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     private GoogleMap mMap;
+    // TODO: 21.06.17 hold it in application class if you want it to live for both activities
     private static MainComponent sComponent;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
@@ -83,6 +87,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         sComponent.inject(this);
     }
 
+    // TODO: 21.06.17 wrong abstraction level
     public static MainComponent getMainComponent() {
         return sComponent;
     }
@@ -100,8 +105,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
             mMapPresenter.setUpAllMarkers();
         }
     }
-
+    // TODO: 21.06.17 multiple creations of api client
     protected synchronized void buildGoogleApiClient() {
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -147,19 +153,20 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         });
     }
 
+    // TODO: 21.06.17 try with dexter for simplicity
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.title_need_location_permission))
                         .setMessage(getString(R.string.text_need_location_permission))
                         .setPositiveButton(getString(R.string.text_ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                // TODO: 21.06.17 violation of DRY
                                 ActivityCompat.requestPermissions(MapsActivity.this,
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_LOCATION );

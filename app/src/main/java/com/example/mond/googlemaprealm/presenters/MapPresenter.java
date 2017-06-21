@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+// TODO: 21.06.17 use interface with methods for this presenter for better abstraction
+// TODO: 21.06.17 detach view from presenter when it's destroyed
 public class MapPresenter implements BasePresenter<MapView>, DbMarkerRepository.DbMarkerRepositoryListener,
         AsyncGeneratorTask.OnGeneratedMarkersSaved {
 
@@ -33,6 +35,7 @@ public class MapPresenter implements BasePresenter<MapView>, DbMarkerRepository.
     }
 
     public void generateMarkers(int count, int radius, LatLng currentLatLng) {
+        // TODO: 21.06.17 don't pass repository obj to task
         AsyncGeneratorTask task = new AsyncGeneratorTask(mDbMarkerRepository, currentLatLng, radius, count, this);
         task.execute();
     }
@@ -41,6 +44,7 @@ public class MapPresenter implements BasePresenter<MapView>, DbMarkerRepository.
         mDbMarkerRepository.getAllMarkers(this);
     }
 
+    // TODO: 21.06.17 check if view still attached
     @Override
     public void setAllMarkers(List<Marker> markers) {
         mView.setAllMarkers(markers);

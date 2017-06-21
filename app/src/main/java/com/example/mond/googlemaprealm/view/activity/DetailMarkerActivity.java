@@ -73,6 +73,7 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
             R.id.detail_marker_activity_marker_ico_variant_3, R.id.detail_marker_activity_marker_ico_variant_4})
     public void highlightIcoType(View view) {
         if(mSelectedIcoType != null) {
+            // TODO: 21.06.17 don't use deprecated methods
             mSelectedIcoType.setBackgroundDrawable(null);
         }
         mSelectedIcoType = (ImageView) view;

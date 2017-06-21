@@ -10,6 +10,7 @@ import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+// TODO: 21.06.17 it's DAO not a repository
 public class DbMarkerRepository {
 
     private Realm mRealm;
@@ -18,6 +19,7 @@ public class DbMarkerRepository {
         mRealm = Realm.getDefaultInstance();
     }
 
+    // TODO: 21.06.17 better send object as parameter to reduce amount of parameters
     public void addNewMarker(final String title, final int type, final LatLng latLng) {
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -50,9 +52,12 @@ public class DbMarkerRepository {
     }
 
     public Marker getMarkerById(final String id) {
+        // TODO: 21.06.17 need async request
+        // TODO: 21.06.17 create constant variables for requested field
         return mRealm.where(Marker.class).equalTo("id", id).findFirst();
     }
 
+    // TODO: 21.06.17 need to do it async
     public void updateMarker(final String id, final  String title, final int index) {
         mRealm = Realm.getDefaultInstance();
         mRealm.executeTransaction(new Realm.Transaction() {
@@ -66,6 +71,7 @@ public class DbMarkerRepository {
         mRealm.close();
     };
 
+    // TODO: 21.06.17 async
     public void deleteMarker(final String id){
         mRealm = Realm.getDefaultInstance();
         mRealm.executeTransaction(new Realm.Transaction() {

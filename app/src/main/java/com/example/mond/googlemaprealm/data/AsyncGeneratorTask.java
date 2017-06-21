@@ -29,6 +29,7 @@ public class AsyncGeneratorTask extends AsyncTask {
     protected Object doInBackground(Object[] params) {
         RandomLocationGenerator randomLocationGenerator = new RandomLocationGenerator();
         List<Marker> markers = randomLocationGenerator.generateRandomLocations(mSelectedLatLng, mRadius, mCount);
+        // TODO: 21.06.17 after callback response,  call repository in presenter
         mDbMarkerRepository.addMarkers(markers);
 
         return null;

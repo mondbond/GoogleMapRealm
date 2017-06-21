@@ -38,7 +38,7 @@ public class AddMarkerDialogFragment extends DialogFragment {
     @BindView(R.id.detail_marker_activity_marker_ico_variant_4)
     ImageView mIconVariant4;
 
-
+    // TODO: 21.06.17 redundant variable
     @BindView(R.id.location_generator_btn)
     Button mGeneratorbtn;
 
@@ -74,6 +74,7 @@ public class AddMarkerDialogFragment extends DialogFragment {
         dismiss();
     }
 
+    // TODO: 21.06.17 better use set target fragment instead of listener
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -85,6 +86,7 @@ public class AddMarkerDialogFragment extends DialogFragment {
         }
     }
 
+    // TODO: 21.06.17 CRASH check for empty fields
     @OnClick(R.id.location_generator_btn)
     public void generateMarkers() {
         mListener.onAddingGeneratedMarkers(Integer.parseInt((mCountInput.getText().toString())),

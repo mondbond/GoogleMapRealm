@@ -28,6 +28,7 @@ public class App extends Application {
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();
+        // TODO: 21.06.17 you never use this injection
         appComponent.inject(this);
     }
 }

@@ -11,6 +11,7 @@ public class Util {
 
     public static Bitmap getScaledIconByIndex(int index, Context context) {
         Bitmap bitmap;
+        // TODO: 21.06.17 bad practice string hardcoded
         switch (index){
             case 1:
                 bitmap = BitmapFactory.decodeResource(context.getResources(), context.getResources()
@@ -33,7 +34,7 @@ public class Util {
                         .getIdentifier("marker_1", "drawable", context.getPackageName()));
                 break;
         }
-
+        // TODO: 21.06.17 use variables for constants for better description
         return Bitmap.createScaledBitmap(bitmap, 100, 100, false);
     }
 
