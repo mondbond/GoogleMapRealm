@@ -13,11 +13,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 
-import com.example.mond.googlemaprealm.App;
 import com.example.mond.googlemaprealm.R;
 import com.example.mond.googlemaprealm.common.BaseActivity;
-import com.example.mond.googlemaprealm.di.containers.AppComponent;
-import com.example.mond.googlemaprealm.di.containers.DaggerMainComponent;
 import com.example.mond.googlemaprealm.di.containers.MainComponent;
 import com.example.mond.googlemaprealm.model.Marker;
 import com.example.mond.googlemaprealm.presenters.MapPresenterImpl;
@@ -34,10 +31,20 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
+import android.util.Log;
 import android.widget.Toast;
+
 import java.util.List;
+
 import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback, MapView,
@@ -49,7 +56,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     private GoogleMap mMap;
-    private static MainComponent sComponent;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
 
@@ -75,12 +81,35 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     }
 
     @Override
-    public void setupComponent(AppComponent appComponent) {
-        sComponent = DaggerMainComponent.builder()
-                .appComponent(App.getAppComponent())
-                .build();
-        sComponent.inject(this);
-        App.setMainComponent(sComponent);
+    public void setupComponent(MainComponent mainComponent) {
+        mainComponent.inject(this);
+    }
+
+    public void initPermission() {
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            return;
+                        }
+                        mMap.setMyLocationEnabled(true);
+                    }
+                    @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                        Toast.makeText(MapsActivity.this, R.string.text_permission_denied, Toast.LENGTH_LONG).show();
+
+                    }
+                    @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {/* ... */}
+                }).check();
     }
 
     @Override
@@ -96,7 +125,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
             mMapPresenterImpl.setUpAllMarkers();
         }
     }
-    // TODO: 21.06.17 multiple creations of api client
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -111,21 +139,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
-
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                buildGoogleApiClient();
-                mMap.setMyLocationEnabled(true);
-            } else {
-                checkLocationPermission();
-            }
-        }
-        else {
-            buildGoogleApiClient();
-            mMap.setMyLocationEnabled(true);
-        }
+        initPermission();
 
         mMap.setOnMapLongClickListener(this);
         mMapPresenterImpl.setUpAllMarkers();
@@ -141,57 +155,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
             return false;
             }
         });
-    }
-
-    // TODO: 21.06.17 try with dexter for simplicity
-    private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.title_need_location_permission))
-                        .setMessage(getString(R.string.text_need_location_permission))
-                        .setPositiveButton(getString(R.string.text_ok), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                // TODO: 21.06.17 violation of DRY
-                                ActivityCompat.requestPermissions(MapsActivity.this,
-                                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                        MY_PERMISSIONS_REQUEST_LOCATION );
-                            }})
-                        .create()
-                        .show();
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION );
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
-
-                        if (mGoogleApiClient == null) {
-                            buildGoogleApiClient();
-                        }
-                        mMap.setMyLocationEnabled(true);
-                    }
-                } else {
-                    Toast.makeText(this, getString(R.string.text_permission_denied), Toast.LENGTH_LONG).show();
-                }
-                return;
-            }
-        }
     }
 
     @Override

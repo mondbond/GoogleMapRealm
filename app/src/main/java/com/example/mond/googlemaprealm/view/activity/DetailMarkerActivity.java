@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import com.example.mond.googlemaprealm.App;
 import com.example.mond.googlemaprealm.R;
 import com.example.mond.googlemaprealm.common.BaseActivity;
-import com.example.mond.googlemaprealm.di.containers.AppComponent;
+import com.example.mond.googlemaprealm.di.containers.MainComponent;
 import com.example.mond.googlemaprealm.model.Marker;
 import com.example.mond.googlemaprealm.presenters.DetailMarkerPresenterImpl;
 import com.example.mond.googlemaprealm.util.Util;
@@ -65,8 +65,8 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
     }
 
     @Override
-    public void setupComponent(AppComponent appComponent) {
-        App.getMainComponent().inject(this);
+    public void setupComponent(MainComponent mainComponent) {
+        mainComponent.inject(this);
         mPresenter.registerView(this);
     }
 
