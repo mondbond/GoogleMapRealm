@@ -10,11 +10,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.mond.googlemaprealm.App;
 import com.example.mond.googlemaprealm.R;
 import com.example.mond.googlemaprealm.common.BaseActivity;
 import com.example.mond.googlemaprealm.di.containers.AppComponent;
 import com.example.mond.googlemaprealm.model.Marker;
-import com.example.mond.googlemaprealm.presenters.DetailMarkerPresenter;
+import com.example.mond.googlemaprealm.presenters.DetailMarkerPresenterImpl;
 import com.example.mond.googlemaprealm.util.Util;
 import com.example.mond.googlemaprealm.view.DetailView;
 
@@ -49,7 +50,7 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
     private String mId;
 
     @Inject
-    DetailMarkerPresenter mPresenter;
+    DetailMarkerPresenterImpl mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,19 +66,18 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
 
     @Override
     public void setupComponent(AppComponent appComponent) {
-        MapsActivity.getMainComponent().inject(this);
-        mPresenter.init(this);
+        App.getMainComponent().inject(this);
+        mPresenter.registerView(this);
     }
 
     @OnClick({R.id.detail_marker_activity_marker_ico_variant_1, R.id.detail_marker_activity_marker_ico_variant_2,
             R.id.detail_marker_activity_marker_ico_variant_3, R.id.detail_marker_activity_marker_ico_variant_4})
     public void highlightIcoType(View view) {
         if(mSelectedIcoType != null) {
-            // TODO: 21.06.17 don't use deprecated methods
-            mSelectedIcoType.setBackgroundDrawable(null);
+            mSelectedIcoType.setBackgroundResource(0);
         }
         mSelectedIcoType = (ImageView) view;
-        mSelectedIcoType.setBackgroundDrawable(getResources().getDrawable(R.drawable.highlight));
+        mSelectedIcoType.setBackgroundResource(R.drawable.highlight);
         mChoosenIcoType = Util.getTypeIndexById(view);
     }
 

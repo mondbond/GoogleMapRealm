@@ -8,6 +8,7 @@
     <string name="text_generate_introduce">or generate random in radius</string>
     <string name="hint_count">Count</string>
     <string name="hint_radius">Radius in km</string>
+    <string name="error_empty_fields">Radius and count fields are empty</string>
 
     <string name="title_current_position">Current position</string>
     <string name="title_need_location_permission">Location Permission Needed</string>

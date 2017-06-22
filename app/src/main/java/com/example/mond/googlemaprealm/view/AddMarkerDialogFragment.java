@@ -3,13 +3,14 @@ package com.example.mond.googlemaprealm.view;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.mond.googlemaprealm.R;
 import com.example.mond.googlemaprealm.util.Util;
@@ -37,10 +38,6 @@ public class AddMarkerDialogFragment extends DialogFragment {
 
     @BindView(R.id.detail_marker_activity_marker_ico_variant_4)
     ImageView mIconVariant4;
-
-    // TODO: 21.06.17 redundant variable
-    @BindView(R.id.location_generator_btn)
-    Button mGeneratorbtn;
 
     @BindView(R.id.location_generator_count_input)
     EditText mCountInput;
@@ -74,7 +71,7 @@ public class AddMarkerDialogFragment extends DialogFragment {
         dismiss();
     }
 
-    // TODO: 21.06.17 better use set target fragment instead of listener
+    // TODO: ? 21.06.17 better use set target fragment instead of listener
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -86,12 +83,16 @@ public class AddMarkerDialogFragment extends DialogFragment {
         }
     }
 
-    // TODO: 21.06.17 CRASH check for empty fields
     @OnClick(R.id.location_generator_btn)
     public void generateMarkers() {
-        mListener.onAddingGeneratedMarkers(Integer.parseInt((mCountInput.getText().toString())),
-                Integer.parseInt(mRadiusInput.getText().toString()));
-        dismiss();
+        if(!TextUtils.equals(mCountInput.getText().toString(), "")
+                || !TextUtils.equals(mRadiusInput.getText().toString(), "")) {
+            mListener.onAddingGeneratedMarkers(Integer.parseInt((mCountInput.getText().toString())),
+                    Integer.parseInt(mRadiusInput.getText().toString()));
+            dismiss();
+        } else {
+            Toast.makeText(getContext(), R.string.error_empty_fields, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

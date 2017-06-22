@@ -3,14 +3,16 @@ package com.example.mond.googlemaprealm;
 import android.app.Application;
 
 import com.example.mond.googlemaprealm.di.containers.AppComponent;
-import com.example.mond.googlemaprealm.di.modules.AppModule;
 import com.example.mond.googlemaprealm.di.containers.DaggerAppComponent;
+import com.example.mond.googlemaprealm.di.containers.MainComponent;
+import com.example.mond.googlemaprealm.di.modules.AppModule;
 
 import io.realm.Realm;
 
 public class App extends Application {
 
     private static AppComponent appComponent;
+    private static MainComponent mainComponent;
 
     @Override
     public void onCreate() {
@@ -22,6 +24,14 @@ public class App extends Application {
 
     public static AppComponent getAppComponent() {
         return appComponent;
+    }
+
+    public static MainComponent getMainComponent() {
+        return mainComponent;
+    }
+
+    public static void setMainComponent(MainComponent mainComponent) {
+        App.mainComponent = mainComponent;
     }
 
     public void buildGraphAndInject() {

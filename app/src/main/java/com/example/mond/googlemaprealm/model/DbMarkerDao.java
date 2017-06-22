@@ -10,12 +10,13 @@ import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-// TODO: 21.06.17 it's DAO not a repository
-public class DbMarkerRepository {
+public class DbMarkerDao {
+
+    private final String FIELD_ID = "id";
 
     private Realm mRealm;
 
-    public DbMarkerRepository() {
+    public DbMarkerDao() {
         mRealm = Realm.getDefaultInstance();
     }
 
@@ -53,8 +54,7 @@ public class DbMarkerRepository {
 
     public Marker getMarkerById(final String id) {
         // TODO: 21.06.17 need async request
-        // TODO: 21.06.17 create constant variables for requested field
-        return mRealm.where(Marker.class).equalTo("id", id).findFirst();
+        return mRealm.where(Marker.class).equalTo(FIELD_ID, id).findFirst();
     }
 
     // TODO: 21.06.17 need to do it async
@@ -63,7 +63,7 @@ public class DbMarkerRepository {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Marker marker = realm.where(Marker.class).equalTo("id", id).findFirstAsync();
+                Marker marker = realm.where(Marker.class).equalTo(FIELD_ID, id).findFirstAsync();
                 marker.setTitle(title);
                 marker.setIconType(index);
             }
@@ -77,7 +77,7 @@ public class DbMarkerRepository {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Marker marker = realm.where(Marker.class).equalTo("id", id).findFirst();
+                Marker marker = realm.where(Marker.class).equalTo(FIELD_ID, id).findFirst();
                 marker.deleteFromRealm();
             }
         });

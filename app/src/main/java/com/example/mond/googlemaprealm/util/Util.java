@@ -9,33 +9,41 @@ import com.example.mond.googlemaprealm.R;
 
 public class Util {
 
+    private static final int SCALED_WIDTH = 100;
+    private static final int SCALED_HEIGHT = 100;
+
+    private static final String MARKER_1 = "marker_1";
+    private static final String MARKER_2 = "marker_2";
+    private static final String MARKER_3 = "marker_3";
+    private static final String MARKER_4 = "marker_4";
+
+    private static final String MARKER_FILES_PATH = "drawable";
+
     public static Bitmap getScaledIconByIndex(int index, Context context) {
         Bitmap bitmap;
-        // TODO: 21.06.17 bad practice string hardcoded
         switch (index){
             case 1:
                 bitmap = BitmapFactory.decodeResource(context.getResources(), context.getResources()
-                        .getIdentifier("marker_1", "drawable", context.getPackageName()));
+                        .getIdentifier(MARKER_1, MARKER_FILES_PATH, context.getPackageName()));
                 break;
             case 2:
                 bitmap = BitmapFactory.decodeResource(context.getResources(), context.getResources()
-                        .getIdentifier("marker_2", "drawable", context.getPackageName()));
+                        .getIdentifier(MARKER_2, MARKER_FILES_PATH, context.getPackageName()));
                 break;
             case 3:
                 bitmap = BitmapFactory.decodeResource(context.getResources(), context.getResources()
-                        .getIdentifier("marker_3", "drawable", context.getPackageName()));
+                        .getIdentifier(MARKER_3, MARKER_FILES_PATH, context.getPackageName()));
                 break;
             case 4:
                 bitmap = BitmapFactory.decodeResource(context.getResources(), context.getResources()
-                        .getIdentifier("marker_4", "drawable", context.getPackageName()));
+                        .getIdentifier(MARKER_4, MARKER_FILES_PATH, context.getPackageName()));
                 break;
             default:
                 bitmap = BitmapFactory.decodeResource(context.getResources(), context.getResources()
-                        .getIdentifier("marker_1", "drawable", context.getPackageName()));
+                        .getIdentifier(MARKER_1, MARKER_FILES_PATH, context.getPackageName()));
                 break;
         }
-        // TODO: 21.06.17 use variables for constants for better description
-        return Bitmap.createScaledBitmap(bitmap, 100, 100, false);
+        return Bitmap.createScaledBitmap(bitmap, SCALED_WIDTH, SCALED_HEIGHT, false);
     }
 
     public static int getTypeIndexById(View view) {

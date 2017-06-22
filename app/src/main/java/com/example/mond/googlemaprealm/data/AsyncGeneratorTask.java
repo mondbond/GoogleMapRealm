@@ -2,7 +2,7 @@ package com.example.mond.googlemaprealm.data;
 
 import android.os.AsyncTask;
 
-import com.example.mond.googlemaprealm.model.DbMarkerRepository;
+import com.example.mond.googlemaprealm.model.DbMarkerDao;
 import com.example.mond.googlemaprealm.model.Marker;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -10,15 +10,16 @@ import java.util.List;
 
 public class AsyncGeneratorTask extends AsyncTask {
 
-    private DbMarkerRepository mDbMarkerRepository;
+    private DbMarkerDao mDbMarkerDao;
 
     private LatLng mSelectedLatLng;
     private int mRadius;
     private int mCount;
     private OnGeneratedMarkersSaved mListener;
+    List<Marker> mMarkers;
 
-    public AsyncGeneratorTask(DbMarkerRepository dbMarkerRepository, LatLng selectedLatLng, int radius, int count, OnGeneratedMarkersSaved listener) {
-        mDbMarkerRepository = dbMarkerRepository;
+
+    public AsyncGeneratorTask(LatLng selectedLatLng, int radius, int count, OnGeneratedMarkersSaved listener) {
         mSelectedLatLng = selectedLatLng;
         mRadius = radius;
         mCount = count;
@@ -28,9 +29,7 @@ public class AsyncGeneratorTask extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] params) {
         RandomLocationGenerator randomLocationGenerator = new RandomLocationGenerator();
-        List<Marker> markers = randomLocationGenerator.generateRandomLocations(mSelectedLatLng, mRadius, mCount);
-        // TODO: 21.06.17 after callback response,  call repository in presenter
-        mDbMarkerRepository.addMarkers(markers);
+        mMarkers = randomLocationGenerator.generateRandomLocations(mSelectedLatLng, mRadius, mCount);
 
         return null;
     }
@@ -38,10 +37,10 @@ public class AsyncGeneratorTask extends AsyncTask {
     @Override
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
-        mListener.onMarkersSaved();
+        mListener.onMarkerListCreated(mMarkers);
     }
 
     public interface OnGeneratedMarkersSaved {
-        void onMarkersSaved();
+        void onMarkerListCreated(List<Marker> markers);
     }
 }

@@ -20,7 +20,7 @@ import com.example.mond.googlemaprealm.di.containers.AppComponent;
 import com.example.mond.googlemaprealm.di.containers.DaggerMainComponent;
 import com.example.mond.googlemaprealm.di.containers.MainComponent;
 import com.example.mond.googlemaprealm.model.Marker;
-import com.example.mond.googlemaprealm.presenters.MapPresenter;
+import com.example.mond.googlemaprealm.presenters.MapPresenterImpl;
 import com.example.mond.googlemaprealm.util.Util;
 import com.example.mond.googlemaprealm.view.AddMarkerDialogFragment;
 import com.example.mond.googlemaprealm.view.MapView;
@@ -35,13 +35,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import android.util.Log;
 import android.widget.Toast;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
 import butterknife.ButterKnife;
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback, MapView,
@@ -53,13 +49,12 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     private GoogleMap mMap;
-    // TODO: 21.06.17 hold it in application class if you want it to live for both activities
     private static MainComponent sComponent;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
 
     @Inject
-    MapPresenter mMapPresenter;
+    MapPresenterImpl mMapPresenterImpl;
 
     private AddMarkerDialogFragment mAddMarkerDialogFragment;
 
@@ -85,29 +80,24 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
                 .appComponent(App.getAppComponent())
                 .build();
         sComponent.inject(this);
-    }
-
-    // TODO: 21.06.17 wrong abstraction level
-    public static MainComponent getMainComponent() {
-        return sComponent;
+        App.setMainComponent(sComponent);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mMapPresenter.init(this);
+        mMapPresenterImpl.registerView(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (mMap != null) {
-            mMapPresenter.setUpAllMarkers();
+            mMapPresenterImpl.setUpAllMarkers();
         }
     }
     // TODO: 21.06.17 multiple creations of api client
     protected synchronized void buildGoogleApiClient() {
-
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -138,7 +128,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         }
 
         mMap.setOnMapLongClickListener(this);
-        mMapPresenter.setUpAllMarkers();
+        mMapPresenterImpl.setUpAllMarkers();
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
@@ -236,13 +226,13 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
 
     @Override
     public void onAddingNewMarker(String title, int type) {
-        mMapPresenter.addNewMarker(title, type, mCurrentLatLng);
-        mMapPresenter.setUpAllMarkers();
+        mMapPresenterImpl.addNewMarker(title, type, mCurrentLatLng);
+        mMapPresenterImpl.setUpAllMarkers();
     }
 
     @Override
     public void onAddingGeneratedMarkers(int count, int radius) {
-        mMapPresenter.generateMarkers(count, radius, mCurrentLatLng);
+        mMapPresenterImpl.generateMarkers(count, radius, mCurrentLatLng);
     }
 
     @Override
