@@ -11,7 +11,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class MapPresenterImpl implements BasePresenter<MapView>, MapPresenter, DbMarkerDao.DbMarkerRepositoryListener,
+public class MapPresenterImpl implements BasePresenter<MapView>, MapPresenter, DbMarkerDao.MarkerChangeDAOListener,
         AsyncGeneratorTask.OnGeneratedMarkersSaved {
 
     private MapView mView;
@@ -33,8 +33,9 @@ public class MapPresenterImpl implements BasePresenter<MapView>, MapPresenter, D
         mView = null;
     }
 
-    public void addNewMarker(String title, int iconType, LatLng latLng){
-        mDbMarkerDao.addNewMarker(title, iconType, latLng);
+    @Override
+    public void addNewMarker(Marker marker){
+        mDbMarkerDao.addNewMarker(marker);
         mDbMarkerDao.getAllMarkers(this);
     }
 
@@ -50,10 +51,20 @@ public class MapPresenterImpl implements BasePresenter<MapView>, MapPresenter, D
     }
 
     @Override
-    public void setAllMarkers(List<Marker> markers) {
+    public void setMarkers(List<Marker> markers) {
         if(mView != null) {
             mView.setAllMarkers(markers);
         }
+    }
+
+    @Override
+    public void onDbChangeTransactionFinished() {
+        setUpAllMarkers();
+    }
+
+    @Override
+    public void onMarkersReceived(List<Marker> markers) {
+        setMarkers(markers);
     }
 
     @Override

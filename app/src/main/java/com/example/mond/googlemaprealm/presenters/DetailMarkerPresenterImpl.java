@@ -1,7 +1,10 @@
 package com.example.mond.googlemaprealm.presenters;
 
+import android.util.Log;
+
 import com.example.mond.googlemaprealm.model.DbMarkerDao;
 import com.example.mond.googlemaprealm.common.BasePresenter;
+import com.example.mond.googlemaprealm.model.Marker;
 import com.example.mond.googlemaprealm.view.DetailView;
 import javax.inject.Inject;
 
@@ -25,7 +28,12 @@ public class DetailMarkerPresenterImpl implements BasePresenter<DetailView>, Det
     }
 
     public void getMarkerById(String id){
-        mView.setMarkerInfo(mDbMarkerDao.getMarkerById(id));
+        mDbMarkerDao.getMarkerById(id, new DbMarkerDao.MarkerDAOReceiver() {
+            @Override
+            public void onMarkerReceived(Marker marker) {
+                mView.setMarkerInfo(marker);
+            }
+        });
     }
 
     public void updateMarkerById(String id, String title, int index) {

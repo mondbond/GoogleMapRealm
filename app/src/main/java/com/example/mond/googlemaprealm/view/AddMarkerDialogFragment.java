@@ -71,7 +71,9 @@ public class AddMarkerDialogFragment extends DialogFragment {
         dismiss();
     }
 
-    // TODO: ? 21.06.17 better use set target fragment instead of listener
+    // TODO: 21.06.17 better use set target fragment instead of listener
+    // there is no any fragment in this screen
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

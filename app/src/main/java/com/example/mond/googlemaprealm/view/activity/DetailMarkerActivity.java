@@ -74,7 +74,7 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
             R.id.detail_marker_activity_marker_ico_variant_3, R.id.detail_marker_activity_marker_ico_variant_4})
     public void highlightIcoType(View view) {
         if(mSelectedIcoType != null) {
-            mSelectedIcoType.setBackgroundResource(0);
+            mSelectedIcoType.setBackgroundResource(View.NO_ID);
         }
         mSelectedIcoType = (ImageView) view;
         mSelectedIcoType.setBackgroundResource(R.drawable.highlight);

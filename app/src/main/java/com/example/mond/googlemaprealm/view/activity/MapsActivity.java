@@ -38,10 +38,10 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -54,6 +54,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     private static final String TAG = "MapsActivity";
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
+    private static int CONNECTION_INTERVAL_IN_ML = 1000;
+    private static int CONNECTION_FASTEST_INTERVAL_IN_ML = 1000;
 
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
@@ -91,22 +94,16 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
+                        if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED
+                                && ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED) {
                             return;
                         }
                         mMap.setMyLocationEnabled(true);
                     }
                     @Override public void onPermissionDenied(PermissionDeniedResponse response) {
-
                         Toast.makeText(MapsActivity.this, R.string.text_permission_denied, Toast.LENGTH_LONG).show();
-
                     }
                     @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {/* ... */}
                 }).check();
@@ -160,8 +157,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(1000);
+        mLocationRequest.setInterval(CONNECTION_INTERVAL_IN_ML);
+        mLocationRequest.setFastestInterval(CONNECTION_FASTEST_INTERVAL_IN_ML);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -189,7 +186,14 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
 
     @Override
     public void onAddingNewMarker(String title, int type) {
-        mMapPresenterImpl.addNewMarker(title, type, mCurrentLatLng);
+        Marker marker = new Marker();
+        marker.setId(UUID.randomUUID().toString());
+        marker.setTitle(title);
+        marker.setIconType(type);
+        marker.setLatitude(mCurrentLatLng.latitude);
+        marker.setLongitude(mCurrentLatLng.longitude);
+
+        mMapPresenterImpl.addNewMarker(marker);
         mMapPresenterImpl.setUpAllMarkers();
     }
 

@@ -1,5 +1,7 @@
 package com.example.mond.googlemaprealm.model;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.UUID;
 import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 public class DbMarkerDao {
@@ -20,16 +23,18 @@ public class DbMarkerDao {
         mRealm = Realm.getDefaultInstance();
     }
 
-    // TODO: 21.06.17 better send object as parameter to reduce amount of parameters
-    public void addNewMarker(final String title, final int type, final LatLng latLng) {
+    public void addNewMarker(final Marker marker) {
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm bgRealm) {
-                Marker marker = bgRealm.createObject(Marker.class, UUID.randomUUID().toString());
-                marker.setTitle(title);
-                marker.setIconType(type);
-                marker.setLatitude(latLng.latitude);
-                marker.setLongitude(latLng.longitude);
+
+                bgRealm.copyToRealm(marker);
+
+//                Marker marker = bgRealm.createObject(Marker.class, UUID.randomUUID().toString());
+//                marker.setTitle(title);
+//                marker.setIconType(type);
+//                marker.setLatitude(latLng.latitude);
+//                marker.setLongitude(latLng.longitude);
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
@@ -40,62 +45,70 @@ public class DbMarkerDao {
         });
     }
 
-    public void getAllMarkers(final DbMarkerRepositoryListener listener) {
+    public void getAllMarkers(final MarkerChangeDAOListener listener) {
         mRealm = Realm.getDefaultInstance();
         RealmResults<Marker> markers = mRealm.where(Marker.class).findAllAsync();
         markers.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<Marker>>() {
             @Override
             public void onChange(RealmResults<Marker> markers, OrderedCollectionChangeSet changeSet) {
-                listener.setAllMarkers(mRealm.copyFromRealm(markers));
+                listener.onMarkersReceived(mRealm.copyFromRealm(markers));
             }
         });
-        mRealm.close();
     }
 
-    public Marker getMarkerById(final String id) {
-        // TODO: 21.06.17 need async request
-        return mRealm.where(Marker.class).equalTo(FIELD_ID, id).findFirst();
+    public void getMarkerById(final String id, final MarkerDAOReceiver listener) {
+        mRealm = Realm.getDefaultInstance();
+        mRealm.where(Marker.class).equalTo(FIELD_ID, id).findFirstAsync().addChangeListener(new RealmChangeListener<Marker>() {
+            @Override
+            public void onChange(Marker marker) {
+                listener.onMarkerReceived(marker);
+            }
+        });
     }
 
-    // TODO: 21.06.17 need to do it async
     public void updateMarker(final String id, final  String title, final int index) {
         mRealm = Realm.getDefaultInstance();
-        mRealm.executeTransaction(new Realm.Transaction() {
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Marker marker = realm.where(Marker.class).equalTo(FIELD_ID, id).findFirstAsync();
+                Marker marker = realm.where(Marker.class).equalTo(FIELD_ID, id).findFirst();
                 marker.setTitle(title);
                 marker.setIconType(index);
-            }
-        });
-        mRealm.close();
+            }});
     };
 
-    // TODO: 21.06.17 async
     public void deleteMarker(final String id){
         mRealm = Realm.getDefaultInstance();
-        mRealm.executeTransaction(new Realm.Transaction() {
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 Marker marker = realm.where(Marker.class).equalTo(FIELD_ID, id).findFirst();
                 marker.deleteFromRealm();
-            }
-        });
-        mRealm.close();
+            }});
     };
 
     public void addMarkers(final List<Marker> markers) {
         mRealm = Realm.getDefaultInstance();
-        mRealm.executeTransaction(new Realm.Transaction() {
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                mRealm.insert(markers);
-            }
-        });
-        mRealm.close();
+                mRealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        mRealm.insert(markers);
+                    }
+                });
+
+            }});
     }
 
-    public interface DbMarkerRepositoryListener {
-        void setAllMarkers(List<Marker> markers);
+    public interface MarkerChangeDAOListener {
+
+        void onMarkersReceived(List<Marker> markers);
+        void onDbChangeTransactionFinished();
+    }
+
+    public interface MarkerDAOReceiver {
+        void onMarkerReceived(Marker marker);
     }
 }
