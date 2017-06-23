@@ -6,6 +6,7 @@ import com.example.mond.googlemaprealm.model.DbMarkerDao;
 import com.example.mond.googlemaprealm.common.BasePresenter;
 import com.example.mond.googlemaprealm.model.Marker;
 import com.example.mond.googlemaprealm.view.DetailView;
+
 import javax.inject.Inject;
 
 public class DetailMarkerPresenterImpl implements BasePresenter<DetailView>, DetailMarkerPresenter {
@@ -13,7 +14,7 @@ public class DetailMarkerPresenterImpl implements BasePresenter<DetailView>, Det
     private DbMarkerDao mDbMarkerDao;
 
     @Inject
-    public DetailMarkerPresenterImpl(DbMarkerDao helper){
+    public DetailMarkerPresenterImpl(DbMarkerDao helper) {
         mDbMarkerDao = helper;
     }
 
@@ -27,7 +28,7 @@ public class DetailMarkerPresenterImpl implements BasePresenter<DetailView>, Det
         mView = null;
     }
 
-    public void getMarkerById(String id){
+    public void getMarkerById(String id) {
         mDbMarkerDao.getMarkerById(id, new DbMarkerDao.MarkerDAOReceiver() {
             @Override
             public void onMarkerReceived(Marker marker) {

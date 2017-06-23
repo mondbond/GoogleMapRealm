@@ -15,4 +15,4 @@ public interface MapPresenter {
 
     void setMarkers(List<Marker> markers);
 
-    }
+}

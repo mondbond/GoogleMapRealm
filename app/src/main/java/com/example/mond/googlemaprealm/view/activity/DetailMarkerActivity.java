@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.example.mond.googlemaprealm.App;
 import com.example.mond.googlemaprealm.R;
 import com.example.mond.googlemaprealm.common.BaseActivity;
 import com.example.mond.googlemaprealm.di.containers.MainComponent;
@@ -31,20 +30,20 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
     private int mChoosenIcoType;
     private ImageView mSelectedIcoType;
 
-    @BindView(R.id.fab) FloatingActionButton fab;
-    @BindView(R.id.detail_marker_activity_title_input)
+    @BindView(R.id.fb_edit) FloatingActionButton fab;
+    @BindView(R.id.et_title)
     EditText mTitleInput;
 
-    @BindView(R.id.detail_marker_activity_marker_ico_variant_1)
+    @BindView(R.id.iv_ico_variant_1)
     ImageView mImageViewV1;
 
-    @BindView(R.id.detail_marker_activity_marker_ico_variant_2)
+    @BindView(R.id.iv_ico_variant_2)
     ImageView mImageViewV2;
 
-    @BindView(R.id.detail_marker_activity_marker_ico_variant_3)
+    @BindView(R.id.iv_ico_variant_3)
     ImageView mImageViewV3;
 
-    @BindView(R.id.detail_marker_activity_marker_ico_variant_4)
+    @BindView(R.id.iv_ico_variant_4)
     ImageView mImageViewV4;
 
     private String mId;
@@ -70,8 +69,8 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
         mPresenter.registerView(this);
     }
 
-    @OnClick({R.id.detail_marker_activity_marker_ico_variant_1, R.id.detail_marker_activity_marker_ico_variant_2,
-            R.id.detail_marker_activity_marker_ico_variant_3, R.id.detail_marker_activity_marker_ico_variant_4})
+    @OnClick({R.id.iv_ico_variant_1, R.id.iv_ico_variant_2,
+            R.id.iv_ico_variant_3, R.id.iv_ico_variant_4})
     public void highlightIcoType(View view) {
         if(mSelectedIcoType != null) {
             mSelectedIcoType.setBackgroundResource(View.NO_ID);
@@ -81,7 +80,7 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
         mChoosenIcoType = Util.getTypeIndexById(view);
     }
 
-    @OnClick(R.id.fab)
+    @OnClick(R.id.fb_edit)
     public void editMarker(){
         mPresenter.updateMarkerById(mId, mTitleInput.getText().toString(), mChoosenIcoType);
         finish();

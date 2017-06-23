@@ -24,25 +24,25 @@ public class AddMarkerDialogFragment extends DialogFragment {
 
     private OnAddingNewMarker mListener;
 
-    @BindView(R.id.detail_marker_activity_title_input)
+    @BindView(R.id.et_title)
     EditText mTitle;
 
-    @BindView(R.id.detail_marker_activity_marker_ico_variant_1)
+    @BindView(R.id.iv_ico_variant_1)
     ImageView mIconVariant1;
 
-    @BindView(R.id.detail_marker_activity_marker_ico_variant_2)
+    @BindView(R.id.iv_ico_variant_2)
     ImageView mIconVariant2;
 
-    @BindView(R.id.detail_marker_activity_marker_ico_variant_3)
+    @BindView(R.id.iv_ico_variant_3)
     ImageView mIconVariant3;
 
-    @BindView(R.id.detail_marker_activity_marker_ico_variant_4)
+    @BindView(R.id.iv_ico_variant_4)
     ImageView mIconVariant4;
 
-    @BindView(R.id.location_generator_count_input)
+    @BindView(R.id.et_generator_count)
     EditText mCountInput;
 
-    @BindView(R.id.location_generator_radius_input)
+    @BindView(R.id.et_generation_radius)
     EditText mRadiusInput;
 
     public static AddMarkerDialogFragment newInstance() {
@@ -64,8 +64,8 @@ public class AddMarkerDialogFragment extends DialogFragment {
         return v;
     }
 
-    @OnClick({R.id.detail_marker_activity_marker_ico_variant_1, R.id.detail_marker_activity_marker_ico_variant_2,
-            R.id.detail_marker_activity_marker_ico_variant_3, R.id.detail_marker_activity_marker_ico_variant_4})
+    @OnClick({R.id.iv_ico_variant_1, R.id.iv_ico_variant_2,
+            R.id.iv_ico_variant_3, R.id.iv_ico_variant_4})
     public void onIconSelected(View view){
         mListener.onAddingNewMarker(mTitle.getText().toString(), Util.getTypeIndexById(view));
         dismiss();
@@ -85,7 +85,7 @@ public class AddMarkerDialogFragment extends DialogFragment {
         }
     }
 
-    @OnClick(R.id.location_generator_btn)
+    @OnClick(R.id.btn_location_generator)
     public void generateMarkers() {
         if(!TextUtils.equals(mCountInput.getText().toString(), "")
                 || !TextUtils.equals(mRadiusInput.getText().toString(), "")) {

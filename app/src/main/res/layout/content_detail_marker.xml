@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,52 +10,52 @@
 
 
     <EditText
-        android:id="@+id/detail_marker_activity_title_input"
+        android:id="@+id/et_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="36dp"
         android:ems="10"
         android:hint="Title"
-        android:inputType="text"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
+        android:inputType="text" />
 
     <ImageView
-        android:id="@+id/detail_marker_activity_marker_ico_variant_3"
+        android:id="@+id/iv_ico_variant_3"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/marker_3"
-        android:layout_alignTop="@+id/detail_marker_activity_marker_ico_variant_4"
-        android:layout_toLeftOf="@+id/detail_marker_activity_marker_ico_variant_4"
-        android:layout_toStartOf="@+id/detail_marker_activity_marker_ico_variant_4"
-        android:layout_alignBottom="@+id/detail_marker_activity_marker_ico_variant_4"/>
+        android:layout_alignBottom="@+id/iv_ico_variant_4"
+        android:layout_alignTop="@+id/iv_ico_variant_4"
+        android:layout_toLeftOf="@+id/iv_ico_variant_4"
+        android:layout_toStartOf="@+id/iv_ico_variant_4"
+        android:src="@drawable/marker_3" />
 
     <ImageView
-        android:id="@+id/detail_marker_activity_marker_ico_variant_4"
+        android:id="@+id/iv_ico_variant_4"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/marker_4"
-        android:layout_below="@+id/detail_marker_activity_title_input"
-        android:layout_alignRight="@+id/detail_marker_activity_title_input"
-        android:layout_alignEnd="@+id/detail_marker_activity_title_input"
-        android:layout_marginTop="14dp"/>
+        android:layout_alignEnd="@+id/et_title"
+        android:layout_alignRight="@+id/et_title"
+        android:layout_below="@+id/et_title"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/marker_4" />
 
     <ImageView
-        android:id="@+id/detail_marker_activity_marker_ico_variant_2"
+        android:id="@+id/iv_ico_variant_2"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/marker_2"
-        android:layout_alignTop="@+id/detail_marker_activity_marker_ico_variant_1"
-        android:layout_toRightOf="@+id/detail_marker_activity_marker_ico_variant_1"
-        android:layout_toEndOf="@+id/detail_marker_activity_marker_ico_variant_1"/>
+        android:layout_alignTop="@+id/iv_ico_variant_1"
+        android:layout_toEndOf="@+id/iv_ico_variant_1"
+        android:layout_toRightOf="@+id/iv_ico_variant_1"
+        android:src="@drawable/marker_2" />
 
     <ImageView
-        android:id="@+id/detail_marker_activity_marker_ico_variant_1"
+        android:id="@+id/iv_ico_variant_1"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/marker_1"
-        android:layout_alignTop="@+id/detail_marker_activity_marker_ico_variant_4"
-        android:layout_alignLeft="@+id/detail_marker_activity_title_input"
-        android:layout_alignStart="@+id/detail_marker_activity_title_input"/>
+        android:layout_alignLeft="@+id/et_title"
+        android:layout_alignStart="@+id/et_title"
+        android:layout_alignTop="@+id/iv_ico_variant_4"
+        android:src="@drawable/marker_1" />
 
 </RelativeLayout>

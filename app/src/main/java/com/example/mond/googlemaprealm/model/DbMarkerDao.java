@@ -27,21 +27,16 @@ public class DbMarkerDao {
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm bgRealm) {
-
                 bgRealm.copyToRealm(marker);
-
-//                Marker marker = bgRealm.createObject(Marker.class, UUID.randomUUID().toString());
-//                marker.setTitle(title);
-//                marker.setIconType(type);
-//                marker.setLatitude(latLng.latitude);
-//                marker.setLongitude(latLng.longitude);
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
-            public void onSuccess() {}
+            public void onSuccess() {
+            }
         }, new Realm.Transaction.OnError() {
             @Override
-            public void onError(Throwable error) {}
+            public void onError(Throwable error) {
+            }
         });
     }
 
@@ -66,7 +61,7 @@ public class DbMarkerDao {
         });
     }
 
-    public void updateMarker(final String id, final  String title, final int index) {
+    public void updateMarker(final String id, final String title, final int index) {
         mRealm = Realm.getDefaultInstance();
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -74,18 +69,24 @@ public class DbMarkerDao {
                 Marker marker = realm.where(Marker.class).equalTo(FIELD_ID, id).findFirst();
                 marker.setTitle(title);
                 marker.setIconType(index);
-            }});
-    };
+            }
+        });
+    }
 
-    public void deleteMarker(final String id){
+    ;
+
+    public void deleteMarker(final String id) {
         mRealm = Realm.getDefaultInstance();
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 Marker marker = realm.where(Marker.class).equalTo(FIELD_ID, id).findFirst();
                 marker.deleteFromRealm();
-            }});
-    };
+            }
+        });
+    }
+
+    ;
 
     public void addMarkers(final List<Marker> markers) {
         mRealm = Realm.getDefaultInstance();
@@ -99,12 +100,14 @@ public class DbMarkerDao {
                     }
                 });
 
-            }});
+            }
+        });
     }
 
     public interface MarkerChangeDAOListener {
 
         void onMarkersReceived(List<Marker> markers);
+
         void onDbChangeTransactionFinished();
     }
 

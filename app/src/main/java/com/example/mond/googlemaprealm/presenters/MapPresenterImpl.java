@@ -18,7 +18,7 @@ public class MapPresenterImpl implements BasePresenter<MapView>, MapPresenter, D
     private DbMarkerDao mDbMarkerDao;
 
     @Inject
-    public MapPresenterImpl(DbMarkerDao helper){
+    public MapPresenterImpl(DbMarkerDao helper) {
         mDbMarkerDao = helper;
     }
 
@@ -34,7 +34,7 @@ public class MapPresenterImpl implements BasePresenter<MapView>, MapPresenter, D
     }
 
     @Override
-    public void addNewMarker(Marker marker){
+    public void addNewMarker(Marker marker) {
         mDbMarkerDao.addNewMarker(marker);
         mDbMarkerDao.getAllMarkers(this);
     }
@@ -46,13 +46,13 @@ public class MapPresenterImpl implements BasePresenter<MapView>, MapPresenter, D
     }
 
     @Override
-    public void setUpAllMarkers(){
+    public void setUpAllMarkers() {
         mDbMarkerDao.getAllMarkers(this);
     }
 
     @Override
     public void setMarkers(List<Marker> markers) {
-        if(mView != null) {
+        if (mView != null) {
             mView.setAllMarkers(markers);
         }
     }
