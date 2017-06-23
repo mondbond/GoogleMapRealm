@@ -14,7 +14,7 @@ import com.example.mond.googlemaprealm.R;
 import com.example.mond.googlemaprealm.common.BaseActivity;
 import com.example.mond.googlemaprealm.di.containers.MainComponent;
 import com.example.mond.googlemaprealm.model.Marker;
-import com.example.mond.googlemaprealm.presenters.DetailMarkerPresenterImpl;
+import com.example.mond.googlemaprealm.presenters.DetailMarkerPresenter;
 import com.example.mond.googlemaprealm.util.Util;
 import com.example.mond.googlemaprealm.view.DetailView;
 
@@ -49,7 +49,7 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
     private String mId;
 
     @Inject
-    DetailMarkerPresenterImpl mPresenter;
+    DetailMarkerPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
     }
 
     @OnClick(R.id.fb_edit)
-    public void editMarker(){
+    public void editMarker() {
         mPresenter.updateMarkerById(mId, mTitleInput.getText().toString(), mChoosenIcoType);
         finish();
     }

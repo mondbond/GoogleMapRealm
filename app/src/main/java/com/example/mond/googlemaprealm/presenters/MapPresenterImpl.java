@@ -11,13 +11,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class MapPresenterImpl implements BasePresenter<MapView>, MapPresenter, DbMarkerDao.MarkerChangeDAOListener,
+public class MapPresenterImpl implements MapPresenter, DbMarkerDao.MarkerChangeDAOListener,
         AsyncGeneratorTask.OnGeneratedMarkersSaved {
 
     private MapView mView;
     private DbMarkerDao mDbMarkerDao;
 
-    @Inject
     public MapPresenterImpl(DbMarkerDao helper) {
         mDbMarkerDao = helper;
     }

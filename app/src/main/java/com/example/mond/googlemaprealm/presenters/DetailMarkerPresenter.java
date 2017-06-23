@@ -1,6 +1,9 @@
 package com.example.mond.googlemaprealm.presenters;
 
-public interface DetailMarkerPresenter {
+import com.example.mond.googlemaprealm.common.BasePresenter;
+import com.example.mond.googlemaprealm.view.DetailView;
+
+public interface DetailMarkerPresenter extends BasePresenter<DetailView> {
 
     void getMarkerById(String id);
 

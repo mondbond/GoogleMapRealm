@@ -1,23 +1,20 @@
 package com.example.mond.googlemaprealm.view.activity;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 
 import com.example.mond.googlemaprealm.R;
 import com.example.mond.googlemaprealm.common.BaseActivity;
 import com.example.mond.googlemaprealm.di.containers.MainComponent;
 import com.example.mond.googlemaprealm.model.Marker;
-import com.example.mond.googlemaprealm.presenters.MapPresenterImpl;
+import com.example.mond.googlemaprealm.presenters.MapPresenter;
 import com.example.mond.googlemaprealm.util.Util;
 import com.example.mond.googlemaprealm.view.AddMarkerDialogFragment;
 import com.example.mond.googlemaprealm.view.MapView;
@@ -63,7 +60,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     Location mLastLocation;
 
     @Inject
-    MapPresenterImpl mMapPresenterImpl;
+    MapPresenter mMapPresenter;
 
     private AddMarkerDialogFragment mAddMarkerDialogFragment;
 
@@ -112,14 +109,14 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     @Override
     protected void onStart() {
         super.onStart();
-        mMapPresenterImpl.registerView(this);
+        mMapPresenter.registerView(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (mMap != null) {
-            mMapPresenterImpl.setUpAllMarkers();
+            mMapPresenter.setUpAllMarkers();
         }
     }
     protected synchronized void buildGoogleApiClient() {
@@ -139,7 +136,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         initPermission();
 
         mMap.setOnMapLongClickListener(this);
-        mMapPresenterImpl.setUpAllMarkers();
+        mMapPresenter.setUpAllMarkers();
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
@@ -193,13 +190,13 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         marker.setLatitude(mCurrentLatLng.latitude);
         marker.setLongitude(mCurrentLatLng.longitude);
 
-        mMapPresenterImpl.addNewMarker(marker);
-        mMapPresenterImpl.setUpAllMarkers();
+        mMapPresenter.addNewMarker(marker);
+        mMapPresenter.setUpAllMarkers();
     }
 
     @Override
     public void onAddingGeneratedMarkers(int count, int radius) {
-        mMapPresenterImpl.generateMarkers(count, radius, mCurrentLatLng);
+        mMapPresenter.generateMarkers(count, radius, mCurrentLatLng);
     }
 
     @Override

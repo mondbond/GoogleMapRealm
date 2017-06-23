@@ -9,11 +9,10 @@ import com.example.mond.googlemaprealm.view.DetailView;
 
 import javax.inject.Inject;
 
-public class DetailMarkerPresenterImpl implements BasePresenter<DetailView>, DetailMarkerPresenter {
+public class DetailMarkerPresenterImpl implements DetailMarkerPresenter {
     private DetailView mView;
     private DbMarkerDao mDbMarkerDao;
 
-    @Inject
     public DetailMarkerPresenterImpl(DbMarkerDao helper) {
         mDbMarkerDao = helper;
     }
