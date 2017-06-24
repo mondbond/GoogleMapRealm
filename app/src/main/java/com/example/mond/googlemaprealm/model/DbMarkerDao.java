@@ -1,11 +1,6 @@
 package com.example.mond.googlemaprealm.model;
 
-import android.util.Log;
-
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.List;
-import java.util.UUID;
 
 import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollectionChangeListener;
@@ -13,6 +8,7 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
+// TODO: 24/06/17 split to common abstraction and realm implementation, so you can easily replace implementation without broking other parts of the app
 public class DbMarkerDao {
 
     private final String FIELD_ID = "id";

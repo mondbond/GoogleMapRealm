@@ -87,6 +87,7 @@ public class AddMarkerDialogFragment extends DialogFragment {
 
     @OnClick(R.id.btn_location_generator)
     public void generateMarkers() {
+//        // TODO: 24/06/17  TextUtils.isEmpty()
         if(!TextUtils.equals(mCountInput.getText().toString(), "")
                 || !TextUtils.equals(mRadiusInput.getText().toString(), "")) {
             mListener.onAddingGeneratedMarkers(Integer.parseInt((mCountInput.getText().toString())),

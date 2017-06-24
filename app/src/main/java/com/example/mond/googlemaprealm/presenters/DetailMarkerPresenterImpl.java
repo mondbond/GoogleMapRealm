@@ -1,13 +1,8 @@
 package com.example.mond.googlemaprealm.presenters;
 
-import android.util.Log;
-
 import com.example.mond.googlemaprealm.model.DbMarkerDao;
-import com.example.mond.googlemaprealm.common.BasePresenter;
 import com.example.mond.googlemaprealm.model.Marker;
 import com.example.mond.googlemaprealm.view.DetailView;
-
-import javax.inject.Inject;
 
 public class DetailMarkerPresenterImpl implements DetailMarkerPresenter {
     private DetailView mView;

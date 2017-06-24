@@ -3,6 +3,7 @@ apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'realm-android'
 
 android {
+//    todo extract versions variables https://goo.gl/uoijJo
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
@@ -13,6 +14,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+//    todo create jks and sign your apk file, connect this jks with google console so google services will be available
     buildTypes {
         release {
             minifyEnabled false
