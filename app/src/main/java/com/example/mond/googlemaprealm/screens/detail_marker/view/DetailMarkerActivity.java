@@ -1,4 +1,4 @@
-package com.example.mond.googlemaprealm.view.activity;
+package com.example.mond.googlemaprealm.screens.detail_marker.view;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,9 +14,8 @@ import com.example.mond.googlemaprealm.R;
 import com.example.mond.googlemaprealm.common.BaseActivity;
 import com.example.mond.googlemaprealm.di.containers.MainComponent;
 import com.example.mond.googlemaprealm.model.Marker;
-import com.example.mond.googlemaprealm.presenters.DetailMarkerPresenter;
-import com.example.mond.googlemaprealm.util.Util;
-import com.example.mond.googlemaprealm.view.DetailView;
+import com.example.mond.googlemaprealm.screens.detail_marker.presenter.DetailMarkerPresenter;
+import com.example.mond.googlemaprealm.utils.Util;
 
 import javax.inject.Inject;
 
@@ -66,7 +65,7 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
     @Override
     public void setupComponent(MainComponent mainComponent) {
         mainComponent.inject(this);
-        mPresenter.registerView(this);
+        mPresenter.attachView(this);
     }
 
     @OnClick({R.id.iv_ico_variant_1, R.id.iv_ico_variant_2,
@@ -104,6 +103,12 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
         inflater.inflate(R.menu.detail_marker_activity_menu, menu);
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mPresenter.detachView();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.mond.googlemaprealm.view;
+package com.example.mond.googlemaprealm.screens.detail_marker.view;
 
 
 import com.example.mond.googlemaprealm.model.Marker;

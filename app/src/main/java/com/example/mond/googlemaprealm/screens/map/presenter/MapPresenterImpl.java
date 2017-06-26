@@ -1,40 +1,38 @@
-package com.example.mond.googlemaprealm.presenters;
+package com.example.mond.googlemaprealm.screens.map.presenter;
 
+import com.example.mond.googlemaprealm.model.MarkerModel;
 import com.example.mond.googlemaprealm.data.AsyncGeneratorTask;
-import com.example.mond.googlemaprealm.model.DbMarkerDao;
-import com.example.mond.googlemaprealm.common.BasePresenter;
+import com.example.mond.googlemaprealm.model.AllMarkersFindListener;
 import com.example.mond.googlemaprealm.model.Marker;
-import com.example.mond.googlemaprealm.view.MapView;
+import com.example.mond.googlemaprealm.screens.map.view.MapView;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
-public class MapPresenterImpl implements MapPresenter, DbMarkerDao.MarkerChangeDAOListener,
+public class MapPresenterImpl implements MapPresenter, AllMarkersFindListener,
         AsyncGeneratorTask.OnGeneratedMarkersSaved {
 
     private MapView mView;
-    private DbMarkerDao mDbMarkerDao;
+    private MarkerModel mDbMarkerDao;
 
-    public MapPresenterImpl(DbMarkerDao helper) {
+    public MapPresenterImpl(MarkerModel helper) {
         mDbMarkerDao = helper;
     }
 
     @Override
-    public void registerView(MapView view) {
+    public void attachView(MapView view) {
         mView = view;
     }
 
 
     @Override
-    public void unRegisterView() {
+    public void detachView() {
         mView = null;
     }
 
     @Override
     public void addNewMarker(Marker marker) {
-        mDbMarkerDao.addNewMarker(marker);
+        mDbMarkerDao.insert(marker);
         mDbMarkerDao.getAllMarkers(this);
     }
 
@@ -57,18 +55,13 @@ public class MapPresenterImpl implements MapPresenter, DbMarkerDao.MarkerChangeD
     }
 
     @Override
-    public void onDbChangeTransactionFinished() {
-        setUpAllMarkers();
-    }
-
-    @Override
-    public void onMarkersReceived(List<Marker> markers) {
+    public void onMarkersFind(List<Marker> markers) {
         setMarkers(markers);
     }
 
     @Override
     public void onMarkerListCreated(List<Marker> markers) {
-        mDbMarkerDao.addMarkers(markers);
+        mDbMarkerDao.addMarkerList(markers);
         mDbMarkerDao.getAllMarkers(this);
     }
 }

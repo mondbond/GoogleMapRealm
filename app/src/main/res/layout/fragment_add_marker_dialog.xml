@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mond.googlemaprealm.view.AddMarkerDialogFragment">
+    tools:context="com.example.mond.googlemaprealm.screens.map.view.AddMarkerDialogFragment">
 
     <EditText
         android:id="@+id/et_title"

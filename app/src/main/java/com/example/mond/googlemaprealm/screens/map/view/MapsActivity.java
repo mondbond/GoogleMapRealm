@@ -1,4 +1,4 @@
-package com.example.mond.googlemaprealm.view.activity;
+package com.example.mond.googlemaprealm.screens.map.view;
 
 import android.Manifest;
 import android.content.Intent;
@@ -14,10 +14,9 @@ import com.example.mond.googlemaprealm.R;
 import com.example.mond.googlemaprealm.common.BaseActivity;
 import com.example.mond.googlemaprealm.di.containers.MainComponent;
 import com.example.mond.googlemaprealm.model.Marker;
-import com.example.mond.googlemaprealm.presenters.MapPresenter;
-import com.example.mond.googlemaprealm.util.Util;
-import com.example.mond.googlemaprealm.view.AddMarkerDialogFragment;
-import com.example.mond.googlemaprealm.view.MapView;
+import com.example.mond.googlemaprealm.screens.map.presenter.MapPresenter;
+import com.example.mond.googlemaprealm.utils.Util;
+import com.example.mond.googlemaprealm.screens.detail_marker.view.DetailMarkerActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -35,6 +34,9 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import java.util.List;
@@ -42,6 +44,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback, MapView,
@@ -61,6 +64,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
 
     @Inject
     MapPresenter mMapPresenter;
+
+    @BindView(R.id.progressCircle) View mLoadingCircle;
 
     private AddMarkerDialogFragment mAddMarkerDialogFragment;
 
@@ -109,7 +114,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     @Override
     protected void onStart() {
         super.onStart();
-        mMapPresenter.registerView(this);
+        mMapPresenter.attachView(this);
     }
 
     @Override
@@ -183,6 +188,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
 
     @Override
     public void onAddingNewMarker(String title, int type) {
+        dismissLoadingDialog();
+
         Marker marker = new Marker();
         marker.setId(UUID.randomUUID().toString());
         marker.setTitle(title);
@@ -200,6 +207,24 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     }
 
     @Override
+    public void showLoadingDialog() {
+        Animation progressAnimation = AnimationUtils.loadAnimation(this, R.anim.loading_rotation);
+        mLoadingCircle.setVisibility(View.VISIBLE);
+        mLoadingCircle.startAnimation(progressAnimation);
+    }
+
+    @Override
+    public void dismissLoadingDialog() {
+        mLoadingCircle.setAnimation(null);
+        mLoadingCircle.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showMarkersLoadingError() {
+        Toast.makeText(this, getString(R.string.error_marker_loading), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void setAllMarkers(List<Marker> markers) {
         mMap.clear();
         for(Marker item : markers) {
@@ -211,8 +236,15 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        mMapPresenter.detachView();
+    }
+
+    @Override
     public void onMapLongClick(LatLng latLng) {
         mCurrentLatLng = latLng;
+        showLoadingDialog();
 
         if(mAddMarkerDialogFragment == null) {
             mAddMarkerDialogFragment = AddMarkerDialogFragment.newInstance();

@@ -2,8 +2,8 @@ package com.example.mond.googlemaprealm.di.containers;
 
 import com.example.mond.googlemaprealm.App;
 import com.example.mond.googlemaprealm.di.modules.MainModule;
-import com.example.mond.googlemaprealm.view.activity.DetailMarkerActivity;
-import com.example.mond.googlemaprealm.view.activity.MapsActivity;
+import com.example.mond.googlemaprealm.screens.detail_marker.view.DetailMarkerActivity;
+import com.example.mond.googlemaprealm.screens.map.view.MapsActivity;
 
 import dagger.Component;
 

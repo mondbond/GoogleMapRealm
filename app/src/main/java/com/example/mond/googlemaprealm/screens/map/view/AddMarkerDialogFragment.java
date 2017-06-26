@@ -1,4 +1,4 @@
-package com.example.mond.googlemaprealm.view;
+package com.example.mond.googlemaprealm.screens.map.view;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mond.googlemaprealm.R;
-import com.example.mond.googlemaprealm.util.Util;
+import com.example.mond.googlemaprealm.utils.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,14 +71,12 @@ public class AddMarkerDialogFragment extends DialogFragment {
         dismiss();
     }
 
-    // TODO: 21.06.17 better use set target fragment instead of listener
-    // there is no any fragment in this screen
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnAddingNewMarker) {
             mListener = (OnAddingNewMarker) context;
+
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnAddingNewMarker");
@@ -87,9 +85,8 @@ public class AddMarkerDialogFragment extends DialogFragment {
 
     @OnClick(R.id.btn_location_generator)
     public void generateMarkers() {
-//        // TODO: 24/06/17  TextUtils.isEmpty()
-        if(!TextUtils.equals(mCountInput.getText().toString(), "")
-                || !TextUtils.equals(mRadiusInput.getText().toString(), "")) {
+        if(!TextUtils.isEmpty(mCountInput.getText().toString())
+                || !TextUtils.isEmpty(mRadiusInput.getText().toString())) {
             mListener.onAddingGeneratedMarkers(Integer.parseInt((mCountInput.getText().toString())),
                     Integer.parseInt(mRadiusInput.getText().toString()));
             dismiss();

@@ -16,6 +16,7 @@
         please accept to use location functionality</string>
     <string name="text_ok">OK</string>
     <string name="text_permission_denied">permission denied</string>
+    <string name="error_marker_loading">Marker loading filed</string>
 
     <string name="title_activity_detail_marker">DetailMarkerActivity</string>
 </resources>

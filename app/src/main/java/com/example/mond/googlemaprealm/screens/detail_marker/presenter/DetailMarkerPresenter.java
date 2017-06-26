@@ -1,7 +1,7 @@
-package com.example.mond.googlemaprealm.presenters;
+package com.example.mond.googlemaprealm.screens.detail_marker.presenter;
 
 import com.example.mond.googlemaprealm.common.BasePresenter;
-import com.example.mond.googlemaprealm.view.DetailView;
+import com.example.mond.googlemaprealm.screens.detail_marker.view.DetailView;
 
 public interface DetailMarkerPresenter extends BasePresenter<DetailView> {
 

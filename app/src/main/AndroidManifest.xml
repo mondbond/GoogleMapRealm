@@ -33,7 +33,7 @@
             android:value="@string/google_maps_key"/>
 
         <activity
-            android:name=".view.activity.MapsActivity"
+            android:name=".screens.map.view.MapsActivity"
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -42,7 +42,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.activity.DetailMarkerActivity"
+            android:name=".screens.detail_marker.view.DetailMarkerActivity"
             android:label="@string/title_activity_detail_marker"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

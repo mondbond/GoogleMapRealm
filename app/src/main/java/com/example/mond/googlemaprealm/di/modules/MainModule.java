@@ -1,10 +1,10 @@
 package com.example.mond.googlemaprealm.di.modules;
 
-import com.example.mond.googlemaprealm.model.DbMarkerDao;
-import com.example.mond.googlemaprealm.presenters.DetailMarkerPresenter;
-import com.example.mond.googlemaprealm.presenters.DetailMarkerPresenterImpl;
-import com.example.mond.googlemaprealm.presenters.MapPresenter;
-import com.example.mond.googlemaprealm.presenters.MapPresenterImpl;
+import com.example.mond.googlemaprealm.model.MarkerDao;
+import com.example.mond.googlemaprealm.screens.detail_marker.presenter.DetailMarkerPresenter;
+import com.example.mond.googlemaprealm.screens.detail_marker.presenter.DetailMarkerPresenterImpl;
+import com.example.mond.googlemaprealm.screens.map.presenter.MapPresenter;
+import com.example.mond.googlemaprealm.screens.map.presenter.MapPresenterImpl;
 
 import dagger.Module;
 import dagger.Provides;
@@ -13,8 +13,8 @@ import dagger.Provides;
 public class MainModule {
 
     @Provides
-    DbMarkerDao providesDbModel() {
-        return new DbMarkerDao();
+    MarkerDao providesDbModel() {
+        return new MarkerDao();
     }
 
     @Provides

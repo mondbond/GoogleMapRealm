@@ -1,4 +1,4 @@
-package com.example.mond.googlemaprealm.util;
+package com.example.mond.googlemaprealm.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -2,7 +2,7 @@ package com.example.mond.googlemaprealm.data;
 
 import android.os.AsyncTask;
 
-import com.example.mond.googlemaprealm.model.DbMarkerDao;
+import com.example.mond.googlemaprealm.model.MarkerDao;
 import com.example.mond.googlemaprealm.model.Marker;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class AsyncGeneratorTask extends AsyncTask {
 
-    private DbMarkerDao mDbMarkerDao;
+    private MarkerDao mMarkerDao;
 
     private LatLng mSelectedLatLng;
     private int mRadius;
