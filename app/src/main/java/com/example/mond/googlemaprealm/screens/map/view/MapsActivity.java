@@ -96,6 +96,8 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
+                        // TODO: 28/06/17 you ask about one permission, but check for two of them
+                        // why PermissionGrantedResponse don't used?
                         if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                                 != PackageManager.PERMISSION_GRANTED
                                 && ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -120,6 +122,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     @Override
     protected void onResume() {
         super.onResume();
+        // TODO: 28/06/17 do you need to fetch all information after each onResume?
         if (mMap != null) {
             mMapPresenter.setUpAllMarkers();
         }
@@ -145,6 +148,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
+                // TODO: 28/06/17 view with onMarkerClick action communicate with presenter; presenter(showMarkerDetailInfo) -> to view
             Intent intent = new Intent(MapsActivity.this, DetailMarkerActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString(DetailMarkerActivity.MARKER_ID, (String) marker.getTag());
@@ -188,6 +192,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
 
     @Override
     public void onAddingNewMarker(String title, int type) {
+        // TODO: 28/06/17 view don't know when to show/dismiss loading dialog, presenter knows
         dismissLoadingDialog();
 
         Marker marker = new Marker();
@@ -198,6 +203,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         marker.setLongitude(mCurrentLatLng.longitude);
 
         mMapPresenter.addNewMarker(marker);
+        // TODO: 28/06/17 why you need to fetch all markers here?
         mMapPresenter.setUpAllMarkers();
     }
 
@@ -228,10 +234,12 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     public void setAllMarkers(List<Marker> markers) {
         mMap.clear();
         for(Marker item : markers) {
-            com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(item.getLatitude(),
-                    item.getLongitude())).title(item.getTitle())
+            com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(item.getLatitude(), item.getLongitude()))
+                    .title(item.getTitle())
                     .icon(BitmapDescriptorFactory.fromBitmap(Util.getScaledIconByIndex(item.getIconType(), this))));
             marker.setTag(item.getId());
+
         }
     }
 

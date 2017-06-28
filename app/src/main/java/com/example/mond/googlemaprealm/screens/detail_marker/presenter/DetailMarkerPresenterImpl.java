@@ -32,6 +32,7 @@ public class DetailMarkerPresenterImpl implements DetailMarkerPresenter {
         });
     }
 
+    // TODO: 28/06/17 notify your view after all operations update, delete
     public void updateMarkerById(String id, String title, int index) {
         Marker updatedMarker = new Marker();
         updatedMarker.setTitle(title);

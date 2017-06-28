@@ -82,6 +82,7 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
     @OnClick(R.id.fb_edit)
     public void editMarker() {
         mPresenter.updateMarkerById(mId, mTitleInput.getText().toString(), mChoosenIcoType);
+        // TODO: 28/06/17 finish after success
         finish();
     }
 
@@ -90,6 +91,7 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
         switch (item.getItemId()){
             case R.id.delete_marker:
                 mPresenter.deleteMarkerById(mId);
+                // TODO: 28/06/17 finish after success
                 finish();
                 break;
         }

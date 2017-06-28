@@ -1,5 +1,6 @@
 package com.example.mond.googlemaprealm.common;
 
+// TODO: 28/06/17 don't like this, read https://habrahabr.ru/post/263033/ and rewrite
 public interface BaseCrud<T, T1> {
 
     void insert(T t);

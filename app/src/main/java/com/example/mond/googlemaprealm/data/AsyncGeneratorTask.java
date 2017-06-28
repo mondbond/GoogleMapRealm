@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
+// TODO: 28/06/17 why don't typify your task AsyncTask<Void, Void, Void)
 public class AsyncGeneratorTask extends AsyncTask {
 
     private MarkerDao mMarkerDao;

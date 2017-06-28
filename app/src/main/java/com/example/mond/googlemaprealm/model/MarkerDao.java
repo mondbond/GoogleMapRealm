@@ -47,6 +47,7 @@ public class MarkerDao implements MarkerModel {
 
     @Override
     public void updateById(final String id, final Marker updateMarker) {
+        // TODO: 28/06/17 why  you need Realm.getDefaultInstance() each time?
         mRealm = Realm.getDefaultInstance();
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -76,6 +77,7 @@ public class MarkerDao implements MarkerModel {
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                // TODO: 28/06/17  why you need executeTransactionAsync & executeTransaction?
                 mRealm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
