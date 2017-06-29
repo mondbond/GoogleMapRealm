@@ -1,5 +1,7 @@
 package com.example.mond.googlemaprealm.screens.map.presenter;
 
+import android.util.Log;
+
 import com.example.mond.googlemaprealm.model.MarkerModel;
 import com.example.mond.googlemaprealm.data.AsyncGeneratorTask;
 import com.example.mond.googlemaprealm.model.AllMarkersFindListener;
@@ -23,7 +25,6 @@ public class MapPresenterImpl implements MapPresenter, AllMarkersFindListener,
     public void attachView(MapView view) {
         mView = view;
     }
-
 
     @Override
     public void detachView() {

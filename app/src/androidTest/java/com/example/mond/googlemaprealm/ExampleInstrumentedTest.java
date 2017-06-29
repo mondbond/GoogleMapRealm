@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.mond.googlemaprealm", appContext.getPackageName());
+        assertEquals("com.example.mond.googl+emaprealm", appContext.getPackageName());
     }
 }
