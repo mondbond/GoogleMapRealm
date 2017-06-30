@@ -1,13 +1,15 @@
 package com.example.mond.googlemaprealm.model;
 
+import com.example.mond.googlemaprealm.model.listeners.ListFindListener;
 import com.example.mond.googlemaprealm.model.specifications.RealmResultSpecification;
 import com.example.mond.googlemaprealm.model.specifications.RealmResultsSpecification;
+import com.example.mond.googlemaprealm.model.listeners.SingleObjectFindListener;
 
 import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class MarkerRepository implements MarkerModel {
+public class MarkerRepository implements Repository<Marker> {
 
     private final String FIELD_ID = "id";
 
@@ -41,7 +43,6 @@ public class MarkerRepository implements MarkerModel {
                 mRealm.insert(markerList);
             }
         });
-
     }
 
     @Override
@@ -79,21 +80,21 @@ public class MarkerRepository implements MarkerModel {
     }
 
     @Override
-    public void query(RealmResultSpecification<Marker> specification, final MarkerFindListener listener) {
+    public void query(RealmResultSpecification<Marker> specification, final SingleObjectFindListener listener) {
         specification.toRealmResult(mRealm, new RealmResultSpecification.RealmSpecificationResultListener<Marker>() {
             @Override
             public void OnSuccess(Marker result) {
-                listener.onMarkerFind(result);
+                listener.onObjectFind(result);
             }
         });
     }
 
     @Override
-    public void queryList(RealmResultsSpecification<Marker> specification, final MarkersFindListener listener) {
+    public void queryList(RealmResultsSpecification<Marker> specification, final ListFindListener listener) {
         specification.toRealmResults(mRealm, new RealmResultsSpecification.RealmSpecificationResultsListener<Marker>() {
             @Override
             public void OnSuccess(RealmResults<Marker> results) {
-                listener.onMarkersFind(results);
+                listener.onListFind(results);
             }
         });
     }

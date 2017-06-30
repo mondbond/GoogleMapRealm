@@ -16,7 +16,6 @@ public class AsyncGeneratorTask extends AsyncTask<Void, Void, ArrayList<Marker>>
     private OnGeneratedMarkersSaved mListener;
     List<Marker> mMarkers;
 
-
     public AsyncGeneratorTask(LatLng selectedLatLng, int radius, int count, OnGeneratedMarkersSaved listener) {
         mSelectedLatLng = selectedLatLng;
         mRadius = radius;

@@ -43,6 +43,7 @@ public class Util {
                         .getIdentifier(MARKER_1, MARKER_FILES_PATH, context.getPackageName()));
                 break;
         }
+
         return Bitmap.createScaledBitmap(bitmap, SCALED_WIDTH, SCALED_HEIGHT, false);
     }
 

@@ -4,7 +4,7 @@ import io.realm.Realm;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
 
-public interface RealmResultsSpecification<T extends RealmModel> {
+public interface RealmResultsSpecification<T extends RealmModel> extends Specification {
 
     public void toRealmResults(Realm realm, RealmSpecificationResultsListener listener);
 
