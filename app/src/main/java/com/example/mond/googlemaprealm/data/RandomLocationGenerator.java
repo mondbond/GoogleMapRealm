@@ -19,11 +19,8 @@ public class RandomLocationGenerator {
     public List<Marker> generateRandomLocations(LatLng latLng, int radius, int count) {
         mKmPerDegree = getKmPerDegree(latLng);
         ArrayList<Marker> markers = new ArrayList<>();
-//       // TODO: 28/06/17 never ever do this again
-        for (int i = 0; i != count; i++) {
-            //  for (int i = 0; i < count; i++) {
-            // TODO: 28/06/17 this is bad to have classes with the same name, now you can see why
-            com.example.mond.googlemaprealm.model.Marker marker = new com.example.mond.googlemaprealm.model.Marker();
+        for (int i = 0; i < count; i++) {
+            Marker marker = new Marker();
             marker.setTitle(String.valueOf(i));
             marker.setId(UUID.randomUUID().toString());
             LatLng randomLatLng = generateRandomLocation(latLng, radius);

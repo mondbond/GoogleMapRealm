@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.mond.googlemaprealm.R;
 import com.example.mond.googlemaprealm.common.BaseActivity;
@@ -50,6 +51,8 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
     @Inject
     DetailMarkerPresenter mPresenter;
 
+    private Marker mMarker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +75,7 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
             R.id.iv_ico_variant_3, R.id.iv_ico_variant_4})
     public void highlightIcoType(View view) {
         if(mSelectedIcoType != null) {
-            mSelectedIcoType.setBackgroundResource(View.NO_ID);
+            mSelectedIcoType.setBackgroundResource(0);
         }
         mSelectedIcoType = (ImageView) view;
         mSelectedIcoType.setBackgroundResource(R.drawable.highlight);
@@ -81,18 +84,20 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
 
     @OnClick(R.id.fb_edit)
     public void editMarker() {
-        mPresenter.updateMarkerById(mId, mTitleInput.getText().toString(), mChoosenIcoType);
-        // TODO: 28/06/17 finish after success
-        finish();
+        Marker updateMarker = new Marker();
+        updateMarker.setId(mMarker.getId());
+        updateMarker.setTitle((mTitleInput.getText().toString()));
+        updateMarker.setLatitude(mMarker.getLatitude());
+        updateMarker.setLongitude(mMarker.getLongitude());
+        updateMarker.setIconType(mChoosenIcoType);
+        mPresenter.updateMarker(updateMarker);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.delete_marker:
-                mPresenter.deleteMarkerById(mId);
-                // TODO: 28/06/17 finish after success
-                finish();
+                mPresenter.deleteMarker(mId);
                 break;
         }
 
@@ -115,6 +120,13 @@ public class DetailMarkerActivity extends BaseActivity implements DetailView {
 
     @Override
     public void setMarkerInfo(Marker marker) {
+        mMarker = marker;
         mTitleInput.setText(marker.getTitle());
+    }
+
+    @Override
+    public void transactionFinishedSuccess() {
+        Toast.makeText(this, getString(R.string.message_transaction_success), Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

@@ -22,7 +22,7 @@ import butterknife.OnClick;
 public class AddMarkerDialogFragment extends DialogFragment {
     public static final String ADD_MARKER_DIALOG_FRAGMENT_TAG = "addMarkerDialogFragmentTag";
 
-    private OnAddingNewMarker mListener;
+    private AddMarkerDialogInteractionListener mListener;
 
     @BindView(R.id.et_title)
     EditText mTitle;
@@ -74,13 +74,15 @@ public class AddMarkerDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnAddingNewMarker) {
-            mListener = (OnAddingNewMarker) context;
+        if (context instanceof AddMarkerDialogInteractionListener) {
+            mListener = (AddMarkerDialogInteractionListener) context;
 
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnAddingNewMarker");
+                    + " must implement AddMarkerDialogInteractionListener");
         }
+
+        mListener.onDialogCreated();
     }
 
     @OnClick(R.id.btn_location_generator)
@@ -101,8 +103,9 @@ public class AddMarkerDialogFragment extends DialogFragment {
         mListener = null;
     }
 
-    public interface OnAddingNewMarker {
+    public interface AddMarkerDialogInteractionListener {
         void onAddingNewMarker(String title, int type);
         void onAddingGeneratedMarkers(int count, int radius);
+        void onDialogCreated();
     }
 }

@@ -2,16 +2,13 @@ package com.example.mond.googlemaprealm.data;
 
 import android.os.AsyncTask;
 
-import com.example.mond.googlemaprealm.model.MarkerDao;
 import com.example.mond.googlemaprealm.model.Marker;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.List;
 
-// TODO: 28/06/17 why don't typify your task AsyncTask<Void, Void, Void)
-public class AsyncGeneratorTask extends AsyncTask {
-
-    private MarkerDao mMarkerDao;
+public class AsyncGeneratorTask extends AsyncTask<Void, Void, ArrayList<Marker>> {
 
     private LatLng mSelectedLatLng;
     private int mRadius;
@@ -28,15 +25,14 @@ public class AsyncGeneratorTask extends AsyncTask {
     }
 
     @Override
-    protected Object doInBackground(Object[] params) {
+    protected ArrayList<Marker> doInBackground(Void... voids) {
         RandomLocationGenerator randomLocationGenerator = new RandomLocationGenerator();
         mMarkers = randomLocationGenerator.generateRandomLocations(mSelectedLatLng, mRadius, mCount);
-
-        return null;
+        return (ArrayList<Marker>) mMarkers;
     }
 
     @Override
-    protected void onPostExecute(Object o) {
+    protected void onPostExecute(ArrayList<Marker> o) {
         super.onPostExecute(o);
         mListener.onMarkerListCreated(mMarkers);
     }

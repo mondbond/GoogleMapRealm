@@ -16,8 +16,7 @@ public class Marker extends RealmObject {
 
     private int iconType;
 
-    public Marker() {
-    }
+    public Marker() {}
 
     public String getId() {
         return id;

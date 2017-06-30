@@ -34,6 +34,8 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -48,7 +50,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback, MapView,
-        AddMarkerDialogFragment.OnAddingNewMarker, GoogleMap.OnMapLongClickListener,
+        AddMarkerDialogFragment.AddMarkerDialogInteractionListener, GoogleMap.OnMapLongClickListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "MapsActivity";
@@ -96,20 +98,20 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        // TODO: 28/06/17 you ask about one permission, but check for two of them
-                        // why PermissionGrantedResponse don't used?
-                        if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                                != PackageManager.PERMISSION_GRANTED
-                                && ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                                != PackageManager.PERMISSION_GRANTED) {
+                        if (!TextUtils.equals(response.getPermissionName(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        && ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED ){
                             return;
                         }
-                        mMap.setMyLocationEnabled(true);
+                            mMap.setMyLocationEnabled(true);
                     }
                     @Override public void onPermissionDenied(PermissionDeniedResponse response) {
                         Toast.makeText(MapsActivity.this, R.string.text_permission_denied, Toast.LENGTH_LONG).show();
                     }
-                    @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {/* ... */}
+                    @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        Log.d("RESPONSEBLA", permission.getName());
+
+                    }
                 }).check();
     }
 
@@ -117,16 +119,11 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     protected void onStart() {
         super.onStart();
         mMapPresenter.attachView(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // TODO: 28/06/17 do you need to fetch all information after each onResume?
         if (mMap != null) {
             mMapPresenter.setUpAllMarkers();
         }
     }
+
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -148,14 +145,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
-                // TODO: 28/06/17 view with onMarkerClick action communicate with presenter; presenter(showMarkerDetailInfo) -> to view
-            Intent intent = new Intent(MapsActivity.this, DetailMarkerActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(DetailMarkerActivity.MARKER_ID, (String) marker.getTag());
-            intent.putExtras(bundle);
-            startActivity(intent);
+        mMapPresenter.showMarkerDetailInfo(marker);
 
-            return false;
+        return false;
             }
         });
     }
@@ -192,9 +184,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
 
     @Override
     public void onAddingNewMarker(String title, int type) {
-        // TODO: 28/06/17 view don't know when to show/dismiss loading dialog, presenter knows
-        dismissLoadingDialog();
-
         Marker marker = new Marker();
         marker.setId(UUID.randomUUID().toString());
         marker.setTitle(title);
@@ -203,13 +192,16 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         marker.setLongitude(mCurrentLatLng.longitude);
 
         mMapPresenter.addNewMarker(marker);
-        // TODO: 28/06/17 why you need to fetch all markers here?
-        mMapPresenter.setUpAllMarkers();
     }
 
     @Override
     public void onAddingGeneratedMarkers(int count, int radius) {
         mMapPresenter.generateMarkers(count, radius, mCurrentLatLng);
+    }
+
+    @Override
+    public void onDialogCreated() {
+        mMapPresenter.hideLoadingAnimation();
     }
 
     @Override
@@ -228,6 +220,15 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     @Override
     public void showMarkersLoadingError() {
         Toast.makeText(this, getString(R.string.error_marker_loading), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void startDetailActivity(com.google.android.gms.maps.model.Marker marker) {
+        Intent intent = new Intent(MapsActivity.this, DetailMarkerActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(DetailMarkerActivity.MARKER_ID, (String) marker.getTag());
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override
@@ -252,7 +253,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     @Override
     public void onMapLongClick(LatLng latLng) {
         mCurrentLatLng = latLng;
-        showLoadingDialog();
+        mMapPresenter.showLoadingAnimation();
 
         if(mAddMarkerDialogFragment == null) {
             mAddMarkerDialogFragment = AddMarkerDialogFragment.newInstance();
