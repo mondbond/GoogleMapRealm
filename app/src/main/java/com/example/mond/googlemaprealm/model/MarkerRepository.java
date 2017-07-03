@@ -80,7 +80,7 @@ public class MarkerRepository implements Repository<Marker> {
     }
 
     @Override
-    public void query(RealmResultSpecification<Marker> specification, final SingleObjectFindListener listener) {
+    public void query(RealmResultSpecification<Marker> specification, final SingleObjectFindListener<Marker> listener) {
         specification.toRealmResult(mRealm, new RealmResultSpecification.RealmSpecificationResultListener<Marker>() {
             @Override
             public void OnSuccess(Marker result) {
@@ -90,7 +90,7 @@ public class MarkerRepository implements Repository<Marker> {
     }
 
     @Override
-    public void queryList(RealmResultsSpecification<Marker> specification, final ListFindListener listener) {
+    public void queryList(RealmResultsSpecification<Marker> specification, final ListFindListener<Marker> listener) {
         specification.toRealmResults(mRealm, new RealmResultsSpecification.RealmSpecificationResultsListener<Marker>() {
             @Override
             public void OnSuccess(RealmResults<Marker> results) {

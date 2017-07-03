@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-public class MapPresenterImpl implements MapPresenter, ListFindListener,
+public class MapPresenterImpl implements MapPresenter, ListFindListener<Marker>,
         AsyncGeneratorTask.OnGeneratedMarkersSaved {
 
     private MapView mView;
@@ -71,13 +71,13 @@ public class MapPresenterImpl implements MapPresenter, ListFindListener,
     }
 
     @Override
-    public void onListFind(List<Marker> markers) {
-        setMarkers(markers);
-    }
-
-    @Override
     public void onMarkerListCreated(List<Marker> markers) {
         mDbMarkerDao.insert(markers);
         mDbMarkerDao.queryList(new GetAllResultsSpecification(), this);
+    }
+
+    @Override
+    public void onListFind(List<Marker> markers) {
+        setMarkers(markers);
     }
 }
