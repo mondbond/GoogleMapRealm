@@ -1,6 +1,10 @@
 package com.example.mond.googlemaprealm;
-import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.powermock.api.mockito.PowerMockito.spy;
+import static org.powermock.api.mockito.PowerMockito.verifyPrivate;
+import static org.powermock.api.mockito.PowerMockito.when;
+import static org.powermock.api.support.membermodification.MemberMatcher.method;
 
 import com.example.mond.googlemaprealm.data.RandomLocationGenerator;
 import com.example.mond.googlemaprealm.model.Marker;
@@ -9,60 +13,61 @@ import com.google.android.gms.maps.model.LatLng;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(RandomLocationGenerator.class)
 public class RandomLocationGeneratorUnitTest {
 
-    RandomLocationGenerator mTest;
+    RandomLocationGenerator mRandomLocationGenerator;
 
     @Before
     public void setupMapPresenterImpl() {
         MockitoAnnotations.initMocks(this);
 
-        mTest = new RandomLocationGenerator();
+        mRandomLocationGenerator = new RandomLocationGenerator();
     }
 
     @Test
-    public void generateRandomLocations_isCorrect() {
-        int count = 6;
-        double radius = 100;
-        double distancePerDegree = 112;
-        double radiusInDegrees = radius / distancePerDegree;
+    public void generateRandomLocations_isCorrectCountAndCoordinates() {
+//        testing if this method return write inputCount with lat/lng in it. verify if generateRandomLocation
+//        invoked
 
-//         final String modifyDataMethodName = "modifyData";
-//        final byte[] expectedBinaryData = new byte[] { 42 };
-//        final String expectedDataId = "id";
-//
-//         Mock only the modifyData method
-//        DataService tested = createPartialMock(DataService.class, modifyDataMethodName);
-//
-//         Expect the private method call to "modifyData"
-//        expectPrivate(tested, modifyDataMethodName, expectedDataId,
-//                expectedBinaryData).andReturn(true);
-//
-//        replay(tested);
-//
-//        assertTrue(tested.replaceData(expectedDataId, expectedBinaryData));
-//
-//        verify(tested);
+        int inputCount = 6;
+        int inputRadius = 100;
+        LatLng inputLatLng = new LatLng(0, 0);
 
+        double expectedCoordinates = 0.01;
+        LatLng expectedLatLng = new LatLng(expectedCoordinates, expectedCoordinates);
 
-
-        ArrayList<Marker> markers = (ArrayList<Marker>) mTest.generateRandomLocations(new LatLng(0,0), 100, 6);
-        assertEquals(count, markers.size());
-
-        for(Marker item: markers) {
-            System.out.print(String.valueOf(radiusInDegrees));
-
-            assertTrue(radiusInDegrees >= item.getLatitude());
-            assertTrue(radiusInDegrees >= item.getLongitude());
+        RandomLocationGenerator randomLocationGeneratorSpy = spy(mRandomLocationGenerator);
+        final Method methodMock = method(RandomLocationGenerator.class, "generateRandomLocation",
+                LatLng.class, int.class);
+        try {
+            when(randomLocationGeneratorSpy, methodMock).withArguments(inputLatLng, inputRadius)
+                    .thenReturn(expectedLatLng);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        ArrayList<Marker> markers = (ArrayList<Marker>) randomLocationGeneratorSpy
+                .generateRandomLocations(inputLatLng, inputRadius, inputCount);
+
+        try {
+            verifyPrivate(randomLocationGeneratorSpy, Mockito.times(inputCount)).invoke(methodMock)
+                    .withArguments(inputLatLng, inputRadius);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertEquals(inputCount, markers.size());
+        assertEquals(expectedCoordinates, markers.get(0).getLatitude(), 0);
+        assertEquals(expectedCoordinates, markers.get(0).getLongitude(), 0);
     }
 }

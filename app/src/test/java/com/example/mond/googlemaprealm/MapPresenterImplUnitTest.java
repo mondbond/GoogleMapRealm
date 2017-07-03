@@ -1,7 +1,5 @@
 package com.example.mond.googlemaprealm;
 
-import android.util.Log;
-
 import com.example.mond.googlemaprealm.model.AllMarkersFindListener;
 import com.example.mond.googlemaprealm.model.Marker;
 import com.example.mond.googlemaprealm.model.MarkerDao;
@@ -52,25 +50,25 @@ public class MapPresenterImplUnitTest {
     }
 
     @Test
-    public void addNewMarker_verifyOnInsertAndgetAllMarkersCall () {
+    public void addNewMarker_verifyOnInsertAndGetAllMarkersCall() {
         mMapPresenter.addNewMarker(mMarkerList.get(0));
         verify(mMarkerDao).insert(mMarkerList.get(0));
         verify(mMarkerDao).getAllMarkers(any(AllMarkersFindListener.class));
     }
 
     @Test
-    public void setUpAllMarkers_isCorrect() {
+    public void setUpAllMarkers_checkPresenterSetMarkersCall() {
         MapPresenterImpl spy = spy(mMapPresenter);
 
-        mMapPresenter.setUpAllMarkers();
+        spy.setUpAllMarkers();
         verify(mMarkerDao).getAllMarkers(mAllMarkersFindListener.capture());
 
         mAllMarkersFindListener.getValue().onMarkersFind(mMarkerList);
-//        verify(spy).setMarkers(mMarkerList);
+        verify(spy).setMarkers(mMarkerList);
     }
 
     @Test
-    public void setMarkers_isCorrect() throws Exception {
+    public void setMarkers_checkViewSetAllMarkersCall() throws Exception {
         mMapPresenter.setMarkers(mMarkerList);
         verify(mMapView).setAllMarkers(mMarkerList);
     }

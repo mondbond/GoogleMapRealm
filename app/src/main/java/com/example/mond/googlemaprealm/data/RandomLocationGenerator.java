@@ -51,6 +51,7 @@ public class RandomLocationGenerator {
 
     private double getKmPerDegree(LatLng currentPosition) {
         LatLng testPosition = new LatLng(currentPosition.latitude + 1, currentPosition.longitude + 1);
+
         return SphericalUtil.computeDistanceBetween(currentPosition, testPosition) / 1000;
     }
 }

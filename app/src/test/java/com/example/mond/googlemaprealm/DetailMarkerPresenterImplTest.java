@@ -1,6 +1,5 @@
 package com.example.mond.googlemaprealm;
 
-import com.example.mond.googlemaprealm.model.AllMarkersFindListener;
 import com.example.mond.googlemaprealm.model.Marker;
 import com.example.mond.googlemaprealm.model.MarkerDao;
 import com.example.mond.googlemaprealm.model.MarkerFindListener;
@@ -37,7 +36,7 @@ public class DetailMarkerPresenterImplTest {
     }
 
     @Test
-    public void getMarkerById_isCorrect() {
+    public void getMarkerById_checkRepositoryAndViewCall() {
         String expectedId = "2";
         mDetailMarkerPresenter.getMarkerById(expectedId);
         verify(mMarkerDao).getById(eq(expectedId), mMarkerFindListener.capture());
@@ -49,7 +48,7 @@ public class DetailMarkerPresenterImplTest {
     }
 
     @Test
-    public void deleteMarkerById_checkCall() {
+    public void deleteMarkerById_checkRepositoryCall() {
         String expectedId = "1";
         mDetailMarkerPresenter.deleteMarkerById(expectedId);
         verify(mMarkerDao).deleteById(eq(expectedId));
