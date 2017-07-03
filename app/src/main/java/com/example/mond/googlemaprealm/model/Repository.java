@@ -18,6 +18,6 @@ public interface Repository<T extends RealmModel> {
     void delete(String id, OnLoadSuccessListener listener);
 
 //    I made realization with two query methods for single and list return. Is it a good variant ?
-    void query(RealmResultSpecification<T> specification, SingleObjectFindListener listener);
-    void queryList(RealmResultsSpecification<T> specification, ListFindListener listener);
+    void query(RealmResultSpecification<T> specification, SingleObjectFindListener<T> listener);
+    void queryList(RealmResultsSpecification<T> specification, ListFindListener<T> listener);
 }

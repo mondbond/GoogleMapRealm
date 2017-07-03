@@ -26,7 +26,7 @@ public class DetailMarkerPresenterImpl implements DetailMarkerPresenter {
     }
 
     public void getMarkerById(String id) {
-        mDbMarkerDao.query(new GetByIdResultsSpecification(id), new SingleObjectFindListener() {
+        mDbMarkerDao.query(new GetByIdResultsSpecification(id), new SingleObjectFindListener<Marker>() {
             @Override
             public void onObjectFind(Marker marker) {
                 mView.setMarkerInfo(marker);
