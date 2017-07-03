@@ -37,7 +37,7 @@ public class RandomLocationGeneratorUnitTest {
     @Test
     public void generateRandomLocations_isCorrectCountAndCoordinates() {
 //        testing if this method return write inputCount with lat/lng in it. verify if generateRandomLocation
-//        invoked
+//        invoke
 
         int inputCount = 6;
         int inputRadius = 100;

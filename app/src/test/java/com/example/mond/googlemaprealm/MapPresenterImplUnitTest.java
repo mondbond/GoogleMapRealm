@@ -1,8 +1,9 @@
 package com.example.mond.googlemaprealm;
 
-import com.example.mond.googlemaprealm.model.AllMarkersFindListener;
 import com.example.mond.googlemaprealm.model.Marker;
-import com.example.mond.googlemaprealm.model.MarkerDao;
+import com.example.mond.googlemaprealm.model.MarkerRepository;
+import com.example.mond.googlemaprealm.model.listeners.ListFindListener;
+import com.example.mond.googlemaprealm.model.specifications.GetAllResultsSpecification;
 import com.example.mond.googlemaprealm.screens.map.presenter.MapPresenterImpl;
 
 import static org.mockito.Mockito.*;
@@ -27,13 +28,13 @@ public class MapPresenterImplUnitTest {
     List<Marker> mMarkerList = new ArrayList<>();
 
     @Mock
-    private MarkerDao mMarkerDao;
+    private MarkerRepository mMarkerRepository;
 
     @Mock
     private com.example.mond.googlemaprealm.screens.map.view.MapView mMapView;
 
     @Captor
-    private ArgumentCaptor<AllMarkersFindListener> mAllMarkersFindListener;
+    private ArgumentCaptor<ListFindListener<Marker>> mAllMarkersFindListener;
 
     private MapPresenterImpl mMapPresenter;
 
@@ -45,15 +46,15 @@ public class MapPresenterImplUnitTest {
         mMarkerList.add(new Marker());
         mMarkerList.add(new Marker());
 
-        mMapPresenter = new MapPresenterImpl(mMarkerDao);
+        mMapPresenter = new MapPresenterImpl(mMarkerRepository);
         mMapPresenter.attachView(mMapView);
     }
 
     @Test
     public void addNewMarker_verifyOnInsertAndGetAllMarkersCall() {
         mMapPresenter.addNewMarker(mMarkerList.get(0));
-        verify(mMarkerDao).insert(mMarkerList.get(0));
-        verify(mMarkerDao).getAllMarkers(any(AllMarkersFindListener.class));
+        verify(mMarkerRepository).insert(mMarkerList.get(0));
+        verify(mMarkerRepository).queryList(any(GetAllResultsSpecification.class), any(ListFindListener.class));
     }
 
     @Test
@@ -61,9 +62,9 @@ public class MapPresenterImplUnitTest {
         MapPresenterImpl spy = spy(mMapPresenter);
 
         spy.setUpAllMarkers();
-        verify(mMarkerDao).getAllMarkers(mAllMarkersFindListener.capture());
+        verify(mMarkerRepository).queryList(any(GetAllResultsSpecification.class), mAllMarkersFindListener.capture());
 
-        mAllMarkersFindListener.getValue().onMarkersFind(mMarkerList);
+        mAllMarkersFindListener.getValue().onListFind(mMarkerList);
         verify(spy).setMarkers(mMarkerList);
     }
 
