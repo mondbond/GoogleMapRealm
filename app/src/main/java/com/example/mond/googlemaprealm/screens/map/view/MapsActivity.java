@@ -34,6 +34,8 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -48,7 +50,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MapsActivity extends BaseActivity implements OnMapReadyCallback, MapView,
-        AddMarkerDialogFragment.OnAddingNewMarker, GoogleMap.OnMapLongClickListener,
+        AddMarkerDialogFragment.AddMarkerDialogInteractionListener, GoogleMap.OnMapLongClickListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "MapsActivity";
@@ -96,18 +98,20 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                                != PackageManager.PERMISSION_GRANTED
-                                && ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                                != PackageManager.PERMISSION_GRANTED) {
+                        if (!TextUtils.equals(response.getPermissionName(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        && ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                                != PackageManager.PERMISSION_GRANTED ){
                             return;
                         }
-                        mMap.setMyLocationEnabled(true);
+                            mMap.setMyLocationEnabled(true);
                     }
                     @Override public void onPermissionDenied(PermissionDeniedResponse response) {
                         Toast.makeText(MapsActivity.this, R.string.text_permission_denied, Toast.LENGTH_LONG).show();
                     }
-                    @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {/* ... */}
+                    @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        Log.d("RESPONSEBLA", permission.getName());
+
+                    }
                 }).check();
     }
 
@@ -115,15 +119,11 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     protected void onStart() {
         super.onStart();
         mMapPresenter.attachView(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         if (mMap != null) {
             mMapPresenter.setUpAllMarkers();
         }
     }
+
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -145,13 +145,9 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(com.google.android.gms.maps.model.Marker marker) {
-            Intent intent = new Intent(MapsActivity.this, DetailMarkerActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(DetailMarkerActivity.MARKER_ID, (String) marker.getTag());
-            intent.putExtras(bundle);
-            startActivity(intent);
+        mMapPresenter.showMarkerDetailInfo(marker);
 
-            return false;
+        return false;
             }
         });
     }
@@ -188,8 +184,6 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
 
     @Override
     public void onAddingNewMarker(String title, int type) {
-        dismissLoadingDialog();
-
         Marker marker = new Marker();
         marker.setId(UUID.randomUUID().toString());
         marker.setTitle(title);
@@ -198,12 +192,16 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
         marker.setLongitude(mCurrentLatLng.longitude);
 
         mMapPresenter.addNewMarker(marker);
-        mMapPresenter.setUpAllMarkers();
     }
 
     @Override
     public void onAddingGeneratedMarkers(int count, int radius) {
         mMapPresenter.generateMarkers(count, radius, mCurrentLatLng);
+    }
+
+    @Override
+    public void onDialogCreated() {
+        mMapPresenter.hideLoadingAnimation();
     }
 
     @Override
@@ -225,13 +223,24 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     }
 
     @Override
+    public void startDetailActivity(com.google.android.gms.maps.model.Marker marker) {
+        Intent intent = new Intent(MapsActivity.this, DetailMarkerActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(DetailMarkerActivity.MARKER_ID, (String) marker.getTag());
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    @Override
     public void setAllMarkers(List<Marker> markers) {
         mMap.clear();
         for(Marker item : markers) {
-            com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(item.getLatitude(),
-                    item.getLongitude())).title(item.getTitle())
+            com.google.android.gms.maps.model.Marker marker = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(item.getLatitude(), item.getLongitude()))
+                    .title(item.getTitle())
                     .icon(BitmapDescriptorFactory.fromBitmap(Util.getScaledIconByIndex(item.getIconType(), this))));
             marker.setTag(item.getId());
+
         }
     }
 
@@ -244,7 +253,7 @@ public class MapsActivity extends BaseActivity implements OnMapReadyCallback, Ma
     @Override
     public void onMapLongClick(LatLng latLng) {
         mCurrentLatLng = latLng;
-        showLoadingDialog();
+        mMapPresenter.showLoadingAnimation();
 
         if(mAddMarkerDialogFragment == null) {
             mAddMarkerDialogFragment = AddMarkerDialogFragment.newInstance();

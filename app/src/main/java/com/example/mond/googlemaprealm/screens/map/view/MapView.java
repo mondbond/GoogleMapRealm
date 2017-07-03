@@ -8,5 +8,6 @@ public interface MapView {
     void showLoadingDialog();
     void dismissLoadingDialog();
     void showMarkersLoadingError();
+    void startDetailActivity(com.google.android.gms.maps.model.Marker marker);
     void setAllMarkers(List<Marker> markers);
 }

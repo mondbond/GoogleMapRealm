@@ -1,15 +1,17 @@
 package com.example.mond.googlemaprealm.screens.detail_marker.presenter;
 
-import com.example.mond.googlemaprealm.model.MarkerModel;
+import com.example.mond.googlemaprealm.model.Repository;
 import com.example.mond.googlemaprealm.model.Marker;
-import com.example.mond.googlemaprealm.model.MarkerFindListener;
+import com.example.mond.googlemaprealm.model.listeners.SingleObjectFindListener;
+import com.example.mond.googlemaprealm.model.OnLoadSuccessListener;
+import com.example.mond.googlemaprealm.model.specifications.GetByIdResultsSpecification;
 import com.example.mond.googlemaprealm.screens.detail_marker.view.DetailView;
 
 public class DetailMarkerPresenterImpl implements DetailMarkerPresenter {
     private DetailView mView;
-    private MarkerModel mDbMarkerDao;
+    private Repository mDbMarkerDao;
 
-    public DetailMarkerPresenterImpl(MarkerModel helper) {
+    public DetailMarkerPresenterImpl(Repository helper) {
         mDbMarkerDao = helper;
     }
 
@@ -24,22 +26,29 @@ public class DetailMarkerPresenterImpl implements DetailMarkerPresenter {
     }
 
     public void getMarkerById(String id) {
-        mDbMarkerDao.getById(id, new MarkerFindListener() {
+        mDbMarkerDao.query(new GetByIdResultsSpecification(id), new SingleObjectFindListener() {
             @Override
-            public void onMarkerFind(Marker marker) {
+            public void onObjectFind(Marker marker) {
                 mView.setMarkerInfo(marker);
             }
         });
     }
 
-    public void updateMarkerById(String id, String title, int index) {
-        Marker updatedMarker = new Marker();
-        updatedMarker.setTitle(title);
-        updatedMarker.setIconType(index);
-        mDbMarkerDao.updateById(id, updatedMarker);
+    public void updateMarker(Marker marker) {
+        mDbMarkerDao.update(marker, new OnLoadSuccessListener(){
+            @Override
+            public void onSuccess() {
+                mView.transactionFinishedSuccess();
+            }
+        });
     }
 
-    public void deleteMarkerById(String id) {
-        mDbMarkerDao.deleteById(id);
+    public void deleteMarker(String id) {
+        mDbMarkerDao.delete(id, new OnLoadSuccessListener() {
+            @Override
+            public void onSuccess() {
+                mView.transactionFinishedSuccess();
+            }
+        });
     }
 }

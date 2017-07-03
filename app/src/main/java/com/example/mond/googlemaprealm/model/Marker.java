@@ -16,8 +16,7 @@ public class Marker extends RealmObject {
 
     private int iconType;
 
-    public Marker() {
-    }
+    public Marker() {}
 
     public Marker(String id, String title, double latitude, double longitude, int iconType) {
         this.id = id;

@@ -19,8 +19,8 @@ public class RandomLocationGenerator {
     public List<Marker> generateRandomLocations(LatLng latLng, int radius, int count) {
         mKmPerDegree = getKmPerDegree(latLng);
         ArrayList<Marker> markers = new ArrayList<>();
-        for (int i = 0; i != count; i++) {
-            com.example.mond.googlemaprealm.model.Marker marker = new com.example.mond.googlemaprealm.model.Marker();
+        for (int i = 0; i < count; i++) {
+            Marker marker = new Marker();
             marker.setTitle(String.valueOf(i));
             marker.setId(UUID.randomUUID().toString());
             LatLng randomLatLng = generateRandomLocation(latLng, radius);

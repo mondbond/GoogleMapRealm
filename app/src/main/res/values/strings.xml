@@ -19,4 +19,5 @@
     <string name="error_marker_loading">Marker loading filed</string>
 
     <string name="title_activity_detail_marker">DetailMarkerActivity</string>
+    <string name="message_transaction_success">Done</string>
 </resources>
