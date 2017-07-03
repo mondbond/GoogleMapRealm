@@ -1,6 +1,6 @@
 package com.example.mond.googlemaprealm.screens.detail_marker.presenter;
 
-import com.example.mond.googlemaprealm.model.Repository;
+import com.example.mond.googlemaprealm.model.MarkerRepository;
 import com.example.mond.googlemaprealm.model.Marker;
 import com.example.mond.googlemaprealm.model.listeners.SingleObjectFindListener;
 import com.example.mond.googlemaprealm.model.OnLoadSuccessListener;
@@ -9,10 +9,10 @@ import com.example.mond.googlemaprealm.screens.detail_marker.view.DetailView;
 
 public class DetailMarkerPresenterImpl implements DetailMarkerPresenter {
     private DetailView mView;
-    private Repository mDbMarkerDao;
+    private MarkerRepository MarkerRepository;
 
-    public DetailMarkerPresenterImpl(Repository helper) {
-        mDbMarkerDao = helper;
+    public DetailMarkerPresenterImpl(MarkerRepository repository) {
+        MarkerRepository = repository;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class DetailMarkerPresenterImpl implements DetailMarkerPresenter {
     }
 
     public void getMarkerById(String id) {
-        mDbMarkerDao.query(new GetByIdResultsSpecification(id), new SingleObjectFindListener<Marker>() {
+        MarkerRepository.query(new GetByIdResultsSpecification(id), new SingleObjectFindListener<Marker>() {
             @Override
             public void onObjectFind(Marker marker) {
                 mView.setMarkerInfo(marker);
@@ -35,7 +35,7 @@ public class DetailMarkerPresenterImpl implements DetailMarkerPresenter {
     }
 
     public void updateMarker(Marker marker) {
-        mDbMarkerDao.update(marker, new OnLoadSuccessListener(){
+        MarkerRepository.update(marker, new OnLoadSuccessListener(){
             @Override
             public void onSuccess() {
                 mView.transactionFinishedSuccess();
@@ -44,7 +44,7 @@ public class DetailMarkerPresenterImpl implements DetailMarkerPresenter {
     }
 
     public void deleteMarker(String id) {
-        mDbMarkerDao.delete(id, new OnLoadSuccessListener() {
+        MarkerRepository.delete(id, new OnLoadSuccessListener() {
             @Override
             public void onSuccess() {
                 mView.transactionFinishedSuccess();
