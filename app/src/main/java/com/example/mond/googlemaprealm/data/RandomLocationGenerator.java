@@ -1,7 +1,6 @@
 package com.example.mond.googlemaprealm.data;
 
 import com.example.mond.googlemaprealm.model.Marker;
-import com.example.mond.googlemaprealm.utils.RandomUtil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
 
@@ -11,6 +10,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public class RandomLocationGenerator {
+    private final int ICON_TYPE_COUNT = 4;
 
     private Random mRandom;
     private double mKmPerDegree;
@@ -21,11 +21,11 @@ public class RandomLocationGenerator {
         for (int i = 0; i < count; i++) {
             Marker marker = new Marker();
             marker.setTitle(String.valueOf(i));
-            marker.setId(RandomUtil.generateUUID());
+            marker.setId(generateUUID());
             LatLng randomLatLng = generateRandomLocation(latLng, radius);
             marker.setLatitude(randomLatLng.latitude);
             marker.setLongitude(randomLatLng.longitude);
-            marker.setIconType(RandomUtil.generateIconType());
+            marker.setIconType(generateIconType());
             markers.add(marker);
         }
 
@@ -52,5 +52,18 @@ public class RandomLocationGenerator {
         LatLng testPosition = new LatLng(currentPosition.latitude + 1, currentPosition.longitude + 1);
 
         return SphericalUtil.computeDistanceBetween(currentPosition, testPosition) / 1000;
+    }
+
+    private String generateUUID() {
+
+        return UUID.randomUUID().toString();
+    }
+
+    private int generateIconType() {
+        if(mRandom == null) {
+            mRandom = new Random();
+        }
+
+        return mRandom.nextInt(ICON_TYPE_COUNT);
     }
 }

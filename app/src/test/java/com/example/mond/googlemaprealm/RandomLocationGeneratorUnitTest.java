@@ -36,22 +36,40 @@ public class RandomLocationGeneratorUnitTest {
 
     @Test
     public void generateRandomLocations_isCorrectCountAndCoordinates() {
-//        testing if this method return write inputCount with lat/lng in it. verify if generateRandomLocation
-//        invoke
 
+        String expectedId = "someId";
+        int expectedIconType = 2;
         int inputCount = 6;
         int inputRadius = 100;
         LatLng inputLatLng = new LatLng(0, 0);
+
+        String generateLocationMethodName = "generateRandomLocation";
+        String generateUUIDMethodName = "generateUUID";
+        String generateIconTypeMethodName = "generateIconType";
 
         double expectedCoordinates = 0.01;
         LatLng expectedLatLng = new LatLng(expectedCoordinates, expectedCoordinates);
 
         RandomLocationGenerator randomLocationGeneratorSpy = spy(mRandomLocationGenerator);
-        final Method methodMock = method(RandomLocationGenerator.class, "generateRandomLocation",
+        final Method methodMock = method(RandomLocationGenerator.class, generateLocationMethodName,
                 LatLng.class, int.class);
         try {
             when(randomLocationGeneratorSpy, methodMock).withArguments(inputLatLng, inputRadius)
                     .thenReturn(expectedLatLng);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        final Method genereteId = method(RandomLocationGenerator.class, generateUUIDMethodName);
+        try {
+            when(randomLocationGeneratorSpy, genereteId).withNoArguments().thenReturn(expectedId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        final Method generateIcon = method(RandomLocationGenerator.class, generateIconTypeMethodName);
+        try {
+            when(randomLocationGeneratorSpy, generateIcon).withNoArguments().thenReturn(expectedIconType);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,5 +87,7 @@ public class RandomLocationGeneratorUnitTest {
         assertEquals(inputCount, markers.size());
         assertEquals(expectedCoordinates, markers.get(0).getLatitude(), 0);
         assertEquals(expectedCoordinates, markers.get(0).getLongitude(), 0);
+        assertEquals(expectedId, markers.get(0).getId());
+        assertEquals(expectedIconType, markers.get(0).getIconType());
     }
 }
