@@ -1,6 +1,7 @@
 package com.example.mond.googlemaprealm.data;
 
 import com.example.mond.googlemaprealm.model.Marker;
+import com.example.mond.googlemaprealm.utils.RandomUtil;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.SphericalUtil;
 
@@ -11,8 +12,6 @@ import java.util.UUID;
 
 public class RandomLocationGenerator {
 
-    private static final int ICON_TYPE_COUNT = 4;
-
     private Random mRandom;
     private double mKmPerDegree;
 
@@ -22,11 +21,11 @@ public class RandomLocationGenerator {
         for (int i = 0; i < count; i++) {
             Marker marker = new Marker();
             marker.setTitle(String.valueOf(i));
-            marker.setId(UUID.randomUUID().toString());
+            marker.setId(RandomUtil.generateUUID());
             LatLng randomLatLng = generateRandomLocation(latLng, radius);
             marker.setLatitude(randomLatLng.latitude);
             marker.setLongitude(randomLatLng.longitude);
-            marker.setIconType(mRandom.nextInt(ICON_TYPE_COUNT));
+            marker.setIconType(RandomUtil.generateIconType());
             markers.add(marker);
         }
 
